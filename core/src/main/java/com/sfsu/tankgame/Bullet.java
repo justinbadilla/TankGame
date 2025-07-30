@@ -8,9 +8,6 @@ public class Bullet extends GameObject {
 
     Texture bulletTexture = new Texture("bullet.jpg");
 
-    float x,y;
-    float angle;
-
     float speed = 400f;
 
     public Bullet(float x, float y, float angle){

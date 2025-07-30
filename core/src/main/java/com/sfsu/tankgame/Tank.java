@@ -11,7 +11,6 @@ public class Tank extends GameObject {
     Texture tankTexture;
     SpriteBatch tankBatch;
 
-    float x, y, angle;
     float rad;
     private float speed = 200f;
     private float rotationSpeed = 200f;
@@ -48,6 +47,8 @@ public class Tank extends GameObject {
         float rad = (float)Math.toRadians(angle);
         float dx = (float)Math.cos(rad);
         float dy = (float)Math.sin(rad);
+
+
 
         if (Gdx.input.isKeyPressed(controls.forwardKey)){
             x += dx * speed * delta;
