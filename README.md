@@ -3,8 +3,8 @@
 
 | Student Information |                |
 |:-------------------:|----------------|
-|  Student Name       |   Name Here    |
-|  Student Email      |   Email Here   |
+|  Student Name       |   Justin Badilla   |
+|  Student Email      |   jbadilla@sfsu.edu   |
 
 
 ## Purpose of jar Folder 
@@ -16,9 +16,9 @@ The jar folder will store the built jar of your term project.
 
 # Required Information when Submitting Tank Game
 
-## Version of Java Used:
+## Version of Java Used: Java 21.0.7
 
-## IDE used: 
+## IDE used: Visual Studio Code and IntelliJ
 
 ## Steps to Import project into IDE:
 
