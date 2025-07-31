@@ -1,8 +1,9 @@
-package com.sfsu.tankgame;
+package com.sfsu.tankgame.gameobjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Bullet extends GameObject {
 
@@ -10,20 +11,41 @@ public class Bullet extends GameObject {
 
     float speed = 400f;
 
+    int damage = 50;
+
     public Bullet(float x, float y, float angle){
         super(x, y);
         this.angle = angle;
+
+        //setting hitbox
+        float width = bulletTexture.getWidth();
+        float height = bulletTexture.getHeight();
+        hitbox.setSize(width, height);
+        hitbox.setPosition(x, y);
 
     }
     
     @Override
     public void update(float delta){
+        update(delta, new Rectangle());
+    }
+
+    public void update(float delta, Rectangle otherHitbox){
         float rad = (float)Math.toRadians(angle);
         float dx = (float)Math.cos(rad);
         float dy = (float)Math.sin(rad);
 
         x += dx * speed * delta;
         y += dy * speed * delta;
+
+        //update hitbox
+        hitbox.setPosition(x, y);
+
+        if (hitbox.overlaps(otherHitbox)){
+            System.out.println("bullet collision");
+
+        }
+
 
     }
 

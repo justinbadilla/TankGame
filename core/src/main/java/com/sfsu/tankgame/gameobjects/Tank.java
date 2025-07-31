@@ -1,10 +1,13 @@
-package com.sfsu.tankgame;
+package com.sfsu.tankgame.gameobjects;
 
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.sfsu.tankgame.ControlScheme;
+
+import java.util.List;
 
 public class Tank extends GameObject {
 
@@ -15,15 +18,18 @@ public class Tank extends GameObject {
     private float speed = 200f;
     private float rotationSpeed = 200f;
 
+    private float prevX, prevY;
+
     ArrayList<Bullet> bullets = new ArrayList<>();
 
     ControlScheme controls;
 
+    int health;
+    int lives;
+
 
     public Tank(Texture image, float x, float y, ControlScheme controls){
         super(x, y);
-        this.x = x;
-        this.y = y;
         this.tankTexture = image;
         this.controls = controls;
 
@@ -32,10 +38,22 @@ public class Tank extends GameObject {
         float height = tankTexture.getHeight();
         hitbox.setSize(width, height);
         hitbox.setPosition(x, y);
+
+        //default health and lives
+        health = 100;
+        lives = 3;
     }
 
     @Override
     public void update(float delta){
+        update(delta, new ArrayList<>());
+    }
+
+    public void update(float delta, List<GameObject> allObjects){
+
+        prevX = x;
+        prevY = y;
+
         if (Gdx.input.isKeyPressed(controls.leftKey)){
             angle += rotationSpeed * delta; 
         }
@@ -60,6 +78,19 @@ public class Tank extends GameObject {
             y -= dy * speed * delta;
         }
 
+        //update
+        hitbox.setPosition(x, y);
+
+        //check collision (if collides, go back to previous postion)
+        for (GameObject other: allObjects){
+            if(other != this && hitbox.overlaps(other.getHitBox())){
+                x =prevX;
+                y =prevY;
+                hitbox.setPosition(x, y);
+            }
+        }
+
+
         //shooting
         if (Gdx.input.isKeyJustPressed(controls.shootKey)){
             rad = (float)Math.toRadians(angle);
@@ -72,8 +103,11 @@ public class Tank extends GameObject {
         }
 
         for (Bullet b: bullets){
-            b.update(delta);
+            b.update(delta, hitbox);
+
         }
+
+        
     }
     
     @Override
