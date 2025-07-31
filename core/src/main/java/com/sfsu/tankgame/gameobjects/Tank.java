@@ -26,6 +26,7 @@ public class Tank extends GameObject {
 
     int health;
     int lives;
+    boolean isDead;
 
 
     public Tank(Texture image, float x, float y, ControlScheme controls){
@@ -42,6 +43,7 @@ public class Tank extends GameObject {
         //default health and lives
         health = 100;
         lives = 3;
+        isDead = false;
     }
 
     @Override
