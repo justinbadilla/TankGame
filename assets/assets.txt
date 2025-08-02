@@ -3,4 +3,9 @@ To Here Knows When (8-bit) - my bloody valentine.mp3
 blue tank.png
 bullet.jpg
 libgdx.png
+maps/maps.tiled-project
+maps/maps.tiled-session
+maps/test.tmx
+maps/tileset1.tsx
+maps/tilesetprototype_v6.png
 red tank.png

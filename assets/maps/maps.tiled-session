@@ -1,0 +1,19 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+    },
+    "last.imagePath": "/Users/justinbadilla/School Projects/tankgame-justinbadilla/assets/maps",
+    "map.lastUsedFormat": "tmx",
+    "openFiles": [
+    ],
+    "project": "maps.tiled-project",
+    "recentFiles": [
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}

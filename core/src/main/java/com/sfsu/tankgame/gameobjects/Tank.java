@@ -86,6 +86,7 @@ public class Tank extends GameObject {
         //check collision (if collides, go back to previous postion)
         for (GameObject other: allObjects){
             if(other != this && hitbox.overlaps(other.getHitBox())){
+                System.out.println("Collision with: " + other.getClass().getSimpleName());
                 x =prevX;
                 y =prevY;
                 hitbox.setPosition(x, y);
