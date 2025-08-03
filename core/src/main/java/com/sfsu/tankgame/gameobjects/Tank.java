@@ -119,6 +119,8 @@ public class Tank extends GameObject {
                         lives--;
                         System.out.println("lives: " + lives);
                         health = 100; //new set of health, but new life
+
+                        //back to spawn
                         
                     }
                     
