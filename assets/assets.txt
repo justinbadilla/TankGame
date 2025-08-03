@@ -1,6 +1,7 @@
 8-bit When You Sleep.mp3
 To Here Knows When (8-bit) - my bloody valentine.mp3
 blue tank.png
+breakable.png
 bullet.jpg
 libgdx.png
 maps/maps.tiled-project

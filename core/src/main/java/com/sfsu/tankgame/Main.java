@@ -16,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.sfsu.tankgame.gameobjects.BreakableWall;
 import com.sfsu.tankgame.gameobjects.GameObject;
 import com.sfsu.tankgame.gameobjects.Tank;
 import com.sfsu.tankgame.gameobjects.Wall;
@@ -29,6 +30,10 @@ public class Main extends ApplicationAdapter {
     private Texture image;
     private Tank tankOne;
     private Tank tankTwo;
+
+    //breakable wall
+    private BreakableWall breakableWallRender;
+    private List<Rectangle> breakableWallArray;
 
     //map and camera
     private TiledMap map;
@@ -71,9 +76,23 @@ public class Main extends ApplicationAdapter {
 
             Rectangle wallRect = new Rectangle(x, y, width, height);
             allObjects.add(new Wall(wallRect));
-
-
         }
+
+        //map collisions (FOR BREAKABLE WALLS)
+        MapLayer breakables = map.getLayers().get("breakables");
+        breakableWallArray = new ArrayList<>();
+
+        for (MapObject object : breakables.getObjects()){
+            float x = Float.parseFloat(object.getProperties().get("x").toString());
+            float y = Float.parseFloat(object.getProperties().get("y").toString());
+            float width = Float.parseFloat(object.getProperties().get("width").toString());
+            float height = Float.parseFloat(object.getProperties().get("height").toString());
+
+            Rectangle wallRect = new Rectangle(x, y, width, height);
+            allObjects.add(new BreakableWall(wallRect));
+            breakableWallArray.add(wallRect);
+        }
+
         
         //adding tanks to array for collisions/game objects
         allObjects.add(tankOne);
@@ -93,6 +112,13 @@ public class Main extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
+
+        //breakable wall
+        for (Rectangle w : breakableWallArray){
+            breakableWallRender = new BreakableWall(w);
+            breakableWallRender.draw(batch);
+        }
+
 
         tankOne.draw(batch);
         tankTwo.draw(batch);
