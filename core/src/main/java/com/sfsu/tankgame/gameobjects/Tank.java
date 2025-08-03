@@ -111,9 +111,14 @@ public class Tank extends GameObject {
                     b.setAlive(false); 
                 }
                 //bullet damage on tanks
-                if (obj != this && b.getHitBox().overlaps(obj.getHitBox())){
+                if (
+                    obj != this && 
+                    !(obj instanceof BreakableWall) &&
+                    !(obj instanceof Wall) &&
+                    b.getHitBox().overlaps(obj.getHitBox())){
+
                     this.takeDamage(b.getDamage());
-                    System.out.println("tank health: " + health);
+                    System.out.println("tank health: " + this.health);
                     b.setAlive(false);
                     if(health <= 0){
                         lives--;
