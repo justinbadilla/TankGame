@@ -58,7 +58,7 @@ public class Main extends ApplicationAdapter {
         image = new Texture("red tank.png");
 
         //two tanks
-        tankOne = new Tank(image, 0, 0, playerOneControls);
+        tankOne = new Tank(image, 100, 200, playerOneControls);
         tankTwo = new Tank (image, 100, 100, playerTwoControls);
 
         //map collisions (adding game object unbreakable walls/rectangles to array)

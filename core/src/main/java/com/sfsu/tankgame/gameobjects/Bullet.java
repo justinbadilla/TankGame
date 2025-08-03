@@ -44,13 +44,6 @@ public class Bullet extends GameObject {
 
         //update hitbox
         hitbox.setPosition(x, y);
-
-        if (hitbox.overlaps(otherHitbox)){
-            System.out.println("bullet collision");
-
-        }
-
-
     }
 
     @Override

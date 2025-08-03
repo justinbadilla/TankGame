@@ -110,9 +110,29 @@ public class Tank extends GameObject {
                     ((BreakableWall) obj).takeDamage(b.getDamage());
                     b.setAlive(false); 
                 }
+                //bullet damage on tanks
+                if (obj != this && b.getHitBox().overlaps(obj.getHitBox())){
+                    this.takeDamage(b.getDamage());
+                    System.out.println("tank health: " + health);
+                    b.setAlive(false);
+                    if(health <= 0){
+                        lives--;
+                        System.out.println("lives: " + lives);
+                        health = 100; //new set of health, but new life
+                        
+                    }
+                    
+                }
+                
             }
         }
+        //remove bullets
+        bullets.removeIf(b-> !b.isAlive());
 
+        //end game condition
+        if (lives <= 0){
+            System.out.println("end game");
+        }
     }
 
         
@@ -134,6 +154,10 @@ public class Tank extends GameObject {
             for (Bullet b: bullets){
                 b.draw(batch);
             }
+    }
+
+    public void takeDamage(int amount){
+        health -= amount;
     }
     
 }
