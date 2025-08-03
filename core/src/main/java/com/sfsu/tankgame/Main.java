@@ -31,10 +31,6 @@ public class Main extends ApplicationAdapter {
     private Tank tankOne;
     private Tank tankTwo;
 
-    //breakable wall
-    private BreakableWall breakableWallRender;
-    private List<Rectangle> breakableWallArray;
-
     //map and camera
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
@@ -80,7 +76,6 @@ public class Main extends ApplicationAdapter {
 
         //map collisions (FOR BREAKABLE WALLS)
         MapLayer breakables = map.getLayers().get("breakables");
-        breakableWallArray = new ArrayList<>();
 
         for (MapObject object : breakables.getObjects()){
             float x = Float.parseFloat(object.getProperties().get("x").toString());
@@ -90,7 +85,6 @@ public class Main extends ApplicationAdapter {
 
             Rectangle wallRect = new Rectangle(x, y, width, height);
             allObjects.add(new BreakableWall(wallRect));
-            breakableWallArray.add(wallRect);
         }
 
         
@@ -109,24 +103,25 @@ public class Main extends ApplicationAdapter {
         camera.update();
         renderer.setView(camera);
         renderer.render();
+
+        //game objects
+        for (GameObject obj : allObjects) {
+            obj.update(delta, allObjects); 
+        }
+
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
 
-        //breakable wall
-        for (Rectangle w : breakableWallArray){
-            breakableWallRender = new BreakableWall(w);
-            breakableWallRender.draw(batch);
+        for (GameObject obj : allObjects) {
+            obj.draw(batch);
         }
 
-
-        tankOne.draw(batch);
-        tankTwo.draw(batch);
-
-        tankOne.update(delta, allObjects);
-        tankTwo.update(delta, allObjects);
-
         batch.end();
+
+        allObjects.removeIf(obj ->
+            obj instanceof BreakableWall && ((BreakableWall) obj).isDestroyed()
+        );
     }
 
     @Override

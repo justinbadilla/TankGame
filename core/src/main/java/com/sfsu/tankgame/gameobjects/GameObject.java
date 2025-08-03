@@ -19,7 +19,7 @@ public abstract class GameObject {
 
     }
 
-    public abstract void update(float delta);
+    public abstract void update(float delta, List<GameObject>allObjects);
     public abstract void draw(SpriteBatch batch);
 
     public Rectangle getHitBox(){

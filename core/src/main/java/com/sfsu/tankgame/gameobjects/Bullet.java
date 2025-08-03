@@ -1,5 +1,7 @@
 package com.sfsu.tankgame.gameobjects;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +14,8 @@ public class Bullet extends GameObject {
     float speed = 400f;
 
     int damage = 50;
+
+    private boolean alive = true;
 
     public Bullet(float x, float y, float angle){
         super(x, y);
@@ -26,7 +30,7 @@ public class Bullet extends GameObject {
     }
     
     @Override
-    public void update(float delta){
+    public void update(float delta, List<GameObject>allObjects){
         update(delta, new Rectangle());
     }
 
@@ -66,6 +70,18 @@ public class Bullet extends GameObject {
 
     public void dispose(){
         bulletTexture.dispose();
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public boolean isAlive(){
+        return alive;
+    }
+
+    public void setAlive(boolean alive){
+        this.alive = alive;
     }
 
 }

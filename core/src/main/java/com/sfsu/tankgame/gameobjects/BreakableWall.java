@@ -23,10 +23,6 @@ public class BreakableWall extends GameObject {
     }
 
     @Override
-    public void update(float delta) {
-        update(delta, new ArrayList<>());
-    }
-    
     public void update(float delta, List<GameObject>allObjects){
 
     }

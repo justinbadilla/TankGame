@@ -47,10 +47,6 @@ public class Tank extends GameObject {
     }
 
     @Override
-    public void update(float delta){
-        update(delta, new ArrayList<>());
-    }
-
     public void update(float delta, List<GameObject> allObjects){
 
         prevX = x;
@@ -108,10 +104,18 @@ public class Tank extends GameObject {
         for (Bullet b: bullets){
             b.update(delta, hitbox);
 
+
+            for (GameObject obj : allObjects) {
+                if (obj instanceof BreakableWall && b.getHitBox().overlaps(obj.getHitBox())) {
+                    ((BreakableWall) obj).takeDamage(b.getDamage());
+                    b.setAlive(false); 
+                }
+            }
         }
 
-        
     }
+
+        
     
     @Override
     public void draw(SpriteBatch batch){
