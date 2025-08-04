@@ -13,7 +13,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sfsu.tankgame.Main;
 
@@ -27,16 +26,15 @@ public class MenuScreen implements Screen{
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
 
+    //button textures and coords
     private Texture logo;
     private float logoX;
     private float logoY;
-
     private Texture playButton;
     private Texture currentPlayButton;
     private float playX;
     private float playY;
     private Texture playButtonClick;
-
     private Texture exitButton;
     private Texture currentExitButton;
     private float exitX;
@@ -101,8 +99,6 @@ public class MenuScreen implements Screen{
         camera.setToOrtho(false, 1600, 900);
         renderer.setView(camera);
 
-
-
         batch = new SpriteBatch();
         
     }
@@ -162,7 +158,7 @@ public class MenuScreen implements Screen{
 
         if(showButtons && Gdx.input.justTouched()){
             if(playHitbox.contains(mouseX, mouseY)){
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new TankScreen(game));
             }
             if(exitHitbox.contains(mouseX, mouseY)){
                 Gdx.app.exit();
@@ -190,6 +186,8 @@ public class MenuScreen implements Screen{
         logo.dispose();
         playButton.dispose();
         exitButton.dispose();
+        playButtonClick.dispose();
+        exitButtonClick.dispose();
         batch.dispose();
     }
 }

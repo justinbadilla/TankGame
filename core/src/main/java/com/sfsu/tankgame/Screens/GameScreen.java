@@ -65,7 +65,7 @@ public class GameScreen implements Screen{
 
         allObjects = new ArrayList<>();
         batch = new SpriteBatch();
-        image = new Texture("red tank.png");
+        image = new Texture("navy tank.png");
 
         //two tanks
         tankOne = new Tank(image, 100, 200, playerOneControls);

@@ -2,10 +2,11 @@
 blue tank.png
 breakable.png
 bullet.jpg
-green tank.png
+grey tank.png
 libgdx.png
 maps/maps.tiled-project
 maps/maps.tiled-session
+maps/test.png
 maps/test.tmx
 maps/tileset1.tsx
 maps/tilesetprototype_v6.png
@@ -22,14 +23,18 @@ maps/tilesets/tileset2a.tsx
 maps/tilesets/tileset2b.tsx
 menu.mp3.asd
 menu.wav
+menu/continue.png
 menu/exit.png
 menu/exitclick.png
 menu/icon.ico
 menu/logoTrans.png
 menu/menuBackground.tmx
+menu/next.png
 menu/play.png
 menu/playclick.png
+menu/previous.png
 menu/tileset2c.tsx
 menu/title.png
+navy tank.png
 red tank.png
 shotfiring.wav

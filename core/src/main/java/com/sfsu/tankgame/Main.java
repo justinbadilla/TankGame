@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sfsu.tankgame.Screens.GameScreen;
 import com.sfsu.tankgame.Screens.MenuScreen;
+import com.sfsu.tankgame.Screens.TankScreen;
 
 public class Main extends Game {
     public SpriteBatch batch;
@@ -17,7 +18,7 @@ public class Main extends Game {
         music.play();
         music.setLooping(true);
         batch = new SpriteBatch();
-        setScreen(new MenuScreen(this));
+        setScreen(new TankScreen(this));
     }
 
     @Override
