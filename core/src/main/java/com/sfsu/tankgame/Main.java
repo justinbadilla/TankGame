@@ -1,18 +1,23 @@
 package com.sfsu.tankgame;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sfsu.tankgame.Screens.GameScreen;
+import com.sfsu.tankgame.Screens.MenuScreen;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
     public SpriteBatch batch;
+    private Music music;
 
     @Override
     public void create() {
+        Music music = Gdx.audio.newMusic(Gdx.files.internal("menu.wav"));
+        music.play();
+        music.setLooping(true);
         batch = new SpriteBatch();
-        setScreen(new GameScreen(this));
+        setScreen(new MenuScreen(this));
     }
 
     @Override
@@ -24,5 +29,6 @@ public class Main extends Game {
     @Override
     public void dispose() {
         batch.dispose();
+        music.dispose();
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,6 +33,9 @@ public class GameScreen implements Screen{
     private Tank tankOne;
     private Tank tankTwo;
 
+    //music and sounds
+    Music music = Gdx.audio.newMusic(Gdx.files.internal("8-bit When You Sleep.mp3"));
+
     //map and camera
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
@@ -47,6 +51,10 @@ public class GameScreen implements Screen{
 
     public GameScreen(Main game){
         this.game = game;
+
+        //music
+        music.play();
+        music.setLooping(true);
 
         //map and camera
         map = new TmxMapLoader().load("maps/test.tmx");
@@ -152,6 +160,7 @@ public class GameScreen implements Screen{
     public void dispose() {
         batch.dispose();
         image.dispose();
+        music.dispose();
     }
     
 }

@@ -1,12 +1,35 @@
 8-bit When You Sleep.mp3
-To Here Knows When (8-bit) - my bloody valentine.mp3
 blue tank.png
 breakable.png
 bullet.jpg
+green tank.png
 libgdx.png
 maps/maps.tiled-project
 maps/maps.tiled-session
 maps/test.tmx
 maps/tileset1.tsx
 maps/tilesetprototype_v6.png
+maps/tilesets/TX Plant.png
+maps/tilesets/TX Player.png
+maps/tilesets/TX Props.png
+maps/tilesets/TX Shadow Plant.png
+maps/tilesets/TX Shadow.png
+maps/tilesets/TX Struct.png
+maps/tilesets/TX Tileset Grass.png
+maps/tilesets/TX Tileset Stone Ground.png
+maps/tilesets/TX Tileset Wall.png
+maps/tilesets/tileset2a.tsx
+maps/tilesets/tileset2b.tsx
+menu.mp3.asd
+menu.wav
+menu/exit.png
+menu/exitclick.png
+menu/icon.ico
+menu/logoTrans.png
+menu/menuBackground.tmx
+menu/play.png
+menu/playclick.png
+menu/tileset2c.tsx
+menu/title.png
 red tank.png
+shotfiring.wav

@@ -3,6 +3,7 @@ package com.sfsu.tankgame.gameobjects;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sfsu.tankgame.ControlScheme;
@@ -13,6 +14,10 @@ public class Tank extends GameObject {
 
     Texture tankTexture;
     SpriteBatch tankBatch;
+
+    //sound fx
+    Sound gunshot = Gdx.audio.newSound(Gdx.files.internal("shotfiring.wav"));
+
 
     float rad;
     private float speed = 200f;
@@ -92,6 +97,7 @@ public class Tank extends GameObject {
 
         //shooting
         if (Gdx.input.isKeyJustPressed(controls.shootKey)){
+            gunshot.play();
             rad = (float)Math.toRadians(angle);
             float barrelLength = 18f;
 
