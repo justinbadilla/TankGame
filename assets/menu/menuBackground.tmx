@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="29" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="20">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="29" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="26">
  <tileset firstgid="1" source="../maps/tileset1.tsx"/>
  <tileset firstgid="1744" source="../maps/tilesets/tileset2a.tsx"/>
  <tileset firstgid="1808" source="../maps/tilesets/tileset2b.tsx"/>
@@ -134,5 +134,14 @@
  <objectgroup id="15" name="Continue">
   <object id="18" x="611.475" y="803.279" width="381.967" height="91.8033"/>
   <object id="19" x="1216.39" y="914.754"/>
+ </objectgroup>
+ <objectgroup id="19" name="previousMap">
+  <object id="25" x="186.066" y="417.213" width="129.508" height="126.23"/>
+ </objectgroup>
+ <objectgroup id="17" name="nextMap">
+  <object id="22" x="1281.97" y="418.033" width="129.508" height="126.23"/>
+ </objectgroup>
+ <objectgroup id="16" name="mapImage">
+  <object id="20" x="439.344" y="160.656" width="729.508" height="601.639"/>
  </objectgroup>
 </map>

@@ -4,6 +4,13 @@ breakable.png
 bullet.jpg
 grey tank.png
 libgdx.png
+maps/TX Tileset Wall.tsx
+maps/map 1.png
+maps/map 1.tmx
+maps/map 2.png
+maps/map 2.tmx
+maps/map 3.png
+maps/map 3.tmx
 maps/maps.tiled-project
 maps/maps.tiled-session
 maps/test.png

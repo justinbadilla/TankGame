@@ -10,15 +10,18 @@ import com.sfsu.tankgame.Screens.TankScreen;
 
 public class Main extends Game {
     public SpriteBatch batch;
-    private Music music;
+    public Music menuMusic;
 
     @Override
     public void create() {
-        Music music = Gdx.audio.newMusic(Gdx.files.internal("menu.wav"));
-        music.play();
-        music.setLooping(true);
         batch = new SpriteBatch();
-        setScreen(new TankScreen(this));
+        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("menu.wav"));
+        menuMusic.setLooping(true);
+        if (!menuMusic.isPlaying()) {
+            menuMusic.play();
+        }
+
+        setScreen(new MenuScreen(this));
     }
 
     @Override
@@ -30,6 +33,8 @@ public class Main extends Game {
     @Override
     public void dispose() {
         batch.dispose();
-        music.dispose();
+        if(menuMusic != null){
+            menuMusic.dispose();
+        }
     }
 }

@@ -37,7 +37,9 @@ public class GameScreen implements Screen{
     Music music = Gdx.audio.newMusic(Gdx.files.internal("8-bit When You Sleep.mp3"));
 
     //map and camera
-    private TiledMap map;
+    private TiledMap mapChoice; //choice
+    private Texture playerOne;
+    private Texture playerTwo;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
 
@@ -49,30 +51,34 @@ public class GameScreen implements Screen{
     private ControlScheme playerTwoControls = new ControlScheme(Input.Keys.UP, Input.Keys.DOWN, Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.ENTER);
 
 
-    public GameScreen(Main game){
+    public GameScreen(Main game, TiledMap mapChoice, Texture playerOne, Texture playerTwo){
         this.game = game;
+        this.mapChoice = mapChoice;
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
+
+        //stop menu music
+        game.menuMusic.stop();
 
         //music
         music.play();
         music.setLooping(true);
 
         //map and camera
-        map = new TmxMapLoader().load("maps/test.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map);
+        renderer = new OrthogonalTiledMapRenderer(mapChoice);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 960);
         renderer.setView(camera);
 
         allObjects = new ArrayList<>();
         batch = new SpriteBatch();
-        image = new Texture("navy tank.png");
 
         //two tanks
-        tankOne = new Tank(image, 100, 200, playerOneControls);
-        tankTwo = new Tank (image, 100, 100, playerTwoControls);
+        tankOne = new Tank(playerOne, 100, 200, playerOneControls);
+        tankTwo = new Tank (playerTwo, 100, 100, playerTwoControls);
 
         //map collisions (adding game object unbreakable walls/rectangles to array)
-        MapLayer unbreakables = map.getLayers().get("unbreakables");
+        MapLayer unbreakables = mapChoice.getLayers().get("unbreakables");
 
         for (MapObject object : unbreakables.getObjects()){
             float x = Float.parseFloat(object.getProperties().get("x").toString());
@@ -85,7 +91,7 @@ public class GameScreen implements Screen{
         }
 
         //map collisions (FOR BREAKABLE WALLS)
-        MapLayer breakables = map.getLayers().get("breakables");
+        MapLayer breakables = mapChoice.getLayers().get("breakables");
 
         for (MapObject object : breakables.getObjects()){
             float x = Float.parseFloat(object.getProperties().get("x").toString());
