@@ -7,9 +7,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -17,6 +19,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.sfsu.tankgame.ControlScheme;
 import com.sfsu.tankgame.Main;
 import com.sfsu.tankgame.gameobjects.BreakableWall;
@@ -41,7 +44,15 @@ public class GameScreen implements Screen{
     private Texture playerOne;
     private Texture playerTwo;
     private OrthogonalTiledMapRenderer renderer;
-    private OrthographicCamera camera;
+    private OrthographicCamera cameraOne;
+    private OrthographicCamera cameraTwo;
+    private FitViewport viewportOne;
+    private FitViewport viewportTwo;
+
+    // Map boundaries
+    private float mapWidth;
+    private float mapHeight;
+
 
     //game object array for hitboxes and collision
     private List<GameObject>allObjects;
@@ -66,15 +77,24 @@ public class GameScreen implements Screen{
 
         //map and camera
         renderer = new OrthogonalTiledMapRenderer(mapChoice);
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 960);
-        renderer.setView(camera);
+
+        //map dimensions
+        mapWidth = mapChoice.getProperties().get("width", Integer.class) * mapChoice.getProperties().get("tilewidth", Integer.class);
+        mapHeight = mapChoice.getProperties().get("height", Integer.class) * mapChoice.getProperties().get("tileheight", Integer.class);
+
+        cameraOne = new OrthographicCamera();
+        cameraTwo = new OrthographicCamera();
+
+        int screenWidth = Gdx.graphics.getWidth();
+        int screenHeight = Gdx.graphics.getHeight();
+        viewportOne = new FitViewport(screenWidth / 2, screenHeight, cameraOne);
+        viewportTwo = new FitViewport(screenWidth / 2, screenHeight, cameraTwo);
 
         allObjects = new ArrayList<>();
         batch = new SpriteBatch();
 
         //two tanks
-        tankOne = new Tank(playerOne, 100, 200, playerOneControls);
+        tankOne = new Tank(playerOne, 400, 400, playerOneControls);
         tankTwo = new Tank (playerTwo, 100, 100, playerTwoControls);
 
         //map collisions (adding game object unbreakable walls/rectangles to array)
@@ -119,33 +139,69 @@ public class GameScreen implements Screen{
         delta = Gdx.graphics.getDeltaTime();
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
-        //camera and map
-        camera.update();
-        renderer.setView(camera);
-        renderer.render();
-
         //game objects
         for (GameObject obj : allObjects) {
             obj.update(delta, allObjects); 
         }
 
-        batch.setProjectionMatrix(camera.combined);
-
-        batch.begin();
-
-        for (GameObject obj : allObjects) {
-            obj.draw(batch);
-        }
-
-        batch.end();
-
+        //breakable walls
         allObjects.removeIf(obj ->
             obj instanceof BreakableWall && ((BreakableWall) obj).isDestroyed()
         );
+
+        //camera and map
+        //Left
+        viewportOne.apply();
+
+        //map bounds for player one
+        float cameraHalfWidth1 = cameraOne.viewportWidth * cameraOne.zoom / 2;
+        float cameraHalfHeight1 = cameraOne.viewportHeight * cameraOne.zoom / 2;
+        float clampedX1 = Math.max(cameraHalfWidth1, Math.min(mapWidth - cameraHalfWidth1, tankOne.getX()));
+        float clampedY1 = Math.max(cameraHalfHeight1, Math.min(mapHeight - cameraHalfHeight1, tankOne.getY()));
+        
+        cameraOne.position.set(clampedX1, clampedY1, 0);
+        cameraOne.update();
+        renderer.setView(cameraOne);
+        renderer.render();
+
+        batch.setProjectionMatrix(cameraOne.combined);
+        batch.begin();
+        for (GameObject obj : allObjects) {
+            obj.draw(batch);
+        }
+        batch.end();
+
+        //Right
+        viewportTwo.apply();
+
+        //mapbounds
+        float cameraHalfWidth2 = cameraTwo.viewportWidth * cameraTwo.zoom / 2;
+        float cameraHalfHeight2 = cameraTwo.viewportHeight * cameraTwo.zoom / 2;
+        float clampedX2 = Math.max(cameraHalfWidth2, Math.min(mapWidth - cameraHalfWidth2, tankTwo.getX()));
+        float clampedY2 = Math.max(cameraHalfHeight2, Math.min(mapHeight - cameraHalfHeight2, tankTwo.getY()));
+
+        cameraTwo.position.set(clampedX2, clampedY2, 0);
+        cameraTwo.update();
+        renderer.setView(cameraTwo);
+        renderer.render();
+
+        batch.setProjectionMatrix(cameraTwo.combined);
+        batch.begin();
+        for (GameObject obj : allObjects) {
+            obj.draw(batch);
+        }
+        batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
+        // viewports to use half the screen width each
+        viewportOne.update(width / 2, height);
+        viewportTwo.update(width / 2, height);
+        
+        // viewport positions for split screen
+        viewportOne.setScreenBounds(0, 0, width / 2, height);
+        viewportTwo.setScreenBounds(width / 2, 0, width / 2, height);
     }
 
     @Override
@@ -167,6 +223,7 @@ public class GameScreen implements Screen{
         batch.dispose();
         image.dispose();
         music.dispose();
+        renderer.dispose();
     }
     
 }
