@@ -17,9 +17,12 @@ public class Bullet extends GameObject {
 
     private boolean alive = true;
 
-    public Bullet(float x, float y, float angle){
+    Tank shooter;
+
+    public Bullet(float x, float y, float angle, Tank shooter){
         super(x, y);
         this.angle = angle;
+        this.shooter = shooter;
 
         //setting hitbox
         float width = bulletTexture.getWidth();
@@ -67,6 +70,10 @@ public class Bullet extends GameObject {
 
     public int getDamage() {
         return damage;
+    }
+
+    public Tank getShooter() {
+        return shooter;
     }
 
     public boolean isAlive(){

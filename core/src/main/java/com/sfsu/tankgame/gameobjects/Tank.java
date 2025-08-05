@@ -25,6 +25,9 @@ public class Tank extends GameObject {
 
     private float prevX, prevY;
 
+    //back to spawn
+    private float spawnX, spawnY;
+
     ArrayList<Bullet> bullets = new ArrayList<>();
 
     ControlScheme controls;
@@ -38,6 +41,10 @@ public class Tank extends GameObject {
         super(x, y);
         this.tankTexture = image;
         this.controls = controls;
+
+        //spawn coord set?
+        spawnX = x;
+        spawnY = y;
 
         //setting hitbox/rectangle
         float width = tankTexture.getWidth();
@@ -103,39 +110,42 @@ public class Tank extends GameObject {
             float bulletX = x + tankTexture.getWidth() / 2f + (float)Math.cos(rad) * barrelLength;
             float bulletY = y + tankTexture.getHeight() / 2f + (float)Math.sin(rad) * barrelLength;
 
-            bullets.add(new Bullet(bulletX, bulletY, angle));
+            bullets.add(new Bullet(bulletX, bulletY, angle, this));
         }
 
-        for (Bullet b: bullets){
+        for (Bullet b : bullets) {
             b.update(delta, hitbox);
 
-
             for (GameObject obj : allObjects) {
+                // Damage breakable walls
                 if (obj instanceof BreakableWall && b.getHitBox().overlaps(obj.getHitBox())) {
                     ((BreakableWall) obj).takeDamage(b.getDamage());
-                    b.setAlive(false); 
-                }
-                //bullet damage on tanks
-                if (
-                    obj != this && 
-                    !(obj instanceof BreakableWall) &&
-                    !(obj instanceof Wall) &&
-                    b.getHitBox().overlaps(obj.getHitBox())){
-
-                    this.takeDamage(b.getDamage());
-                    System.out.println("tank health: " + this.health);
                     b.setAlive(false);
-                    if(health <= 0){
-                        lives--;
-                        System.out.println("lives: " + lives);
-                        health = 100; //new set of health, but new life
-
-                        //back to spawn
-                        
-                    }
-                    
                 }
-                
+                //damage on other tank
+                if (
+                    obj instanceof Tank &&
+                    obj != this && 
+                    obj != b.getShooter() && 
+                    b.getHitBox().overlaps(obj.getHitBox())
+                ) {
+                    Tank targetTank = (Tank) obj;
+                    targetTank.takeDamage(b.getDamage());
+                    System.out.println("tank health: " + targetTank.health);
+                    b.setAlive(false);
+
+                    
+                    if (targetTank.health <= 0) {
+                        targetTank.lives--;
+                        System.out.println("lives: " + targetTank.lives);
+                        targetTank.health = 100;
+
+                        // Respawn
+                        targetTank.x = targetTank.spawnX;
+                        targetTank.y = targetTank.spawnY;
+                        targetTank.hitbox.setPosition(targetTank.x, targetTank.y);
+                    }
+                }
             }
         }
         //remove bullets
