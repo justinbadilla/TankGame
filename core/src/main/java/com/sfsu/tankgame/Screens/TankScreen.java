@@ -1,6 +1,7 @@
 package com.sfsu.tankgame.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -169,38 +170,39 @@ public class TankScreen implements Screen{
         batch.draw(tankTextures[playerTwoChoice], tankTwoDisplayX+40, tankTwoDisplayY+45);
 
         //button logic
-        if(Gdx.input.justTouched()){
+        if(Gdx.input.isKeyJustPressed(Keys.RIGHT)){
             //player1
-            if(nextOneHitBox.contains(mouseX, mouseY)){
-                playerOneChoice ++;
-                if(playerOneChoice >= tankTextures.length){
-                    playerOneChoice = 0;
-                }
+            playerOneChoice ++;
+            if(playerOneChoice >= tankTextures.length){
+                playerOneChoice = 0;
             }
-            if(prevOneHitBox.contains(mouseX, mouseY)){
-                playerOneChoice--;
-                if(playerOneChoice <0){
-                    playerOneChoice = tankTextures.length-1;
-                }
+        }
+        if(Gdx.input.isKeyJustPressed(Keys.LEFT)){
+            playerOneChoice--;
+            if(playerOneChoice <0){
+                playerOneChoice = tankTextures.length-1;
             }
+        }
             //player2
-            if(nextTwoHitBox.contains(mouseX, mouseY)){
-                playerTwoChoice ++;
-                if(playerTwoChoice >= tankTextures.length){
-                    playerTwoChoice = 0;
-                }
+        if(Gdx.input.isKeyJustPressed(Keys.D)){
+            playerTwoChoice ++;
+            if(playerTwoChoice >= tankTextures.length){
+                playerTwoChoice = 0;
             }
-            if(prevTwoHitBox.contains(mouseX, mouseY)){
-                playerTwoChoice--;
-                if(playerTwoChoice <0){
-                    playerTwoChoice = tankTextures.length-1;
-                }
+        }
+        if(Gdx.input.isKeyJustPressed(Keys.A)){
+            playerTwoChoice--;
+            if(playerTwoChoice <0){
+                playerTwoChoice = tankTextures.length-1;
             }
+        }
+        if (Gdx.input.justTouched()){
             if(continueHitBox.contains(mouseX, mouseY)){
                 game.setScreen(new MapScreen(tankTextures[playerOneChoice], tankTextures[playerTwoChoice], game));
             }
-
         }
+
+    
 
         batch.end();
     }

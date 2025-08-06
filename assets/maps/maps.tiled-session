@@ -10,11 +10,14 @@
         "/Users/justinbadilla/School Projects/tankgame-justinbadilla/assets/menu/menuBackground.tmx": {
             "expandedObjectLayers": [
                 15,
+                16,
                 14,
                 12,
                 10,
                 13,
+                19,
                 3,
+                17,
                 2,
                 11,
                 4
@@ -31,11 +34,15 @@
             "scaleInEditor": 1
         },
         "map 1.tmx": {
-            "scale": 0.61275,
+            "expandedObjectLayers": [
+                5,
+                4
+            ],
+            "scale": 0.61,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 799.6736026111791,
-                "y": 607.9151366789066
+                "x": 800,
+                "y": 607.3770491803278
             }
         },
         "map 2.tmx": {
@@ -51,6 +58,10 @@
             }
         },
         "map 3.tmx": {
+            "expandedObjectLayers": [
+                5,
+                4
+            ],
             "scale": 0.61275,
             "selectedLayer": 4,
             "viewCenter": {

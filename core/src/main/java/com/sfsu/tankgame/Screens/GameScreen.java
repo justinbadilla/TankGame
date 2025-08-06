@@ -82,9 +82,9 @@ public class GameScreen implements Screen{
         mapWidth = mapChoice.getProperties().get("width", Integer.class) * mapChoice.getProperties().get("tilewidth", Integer.class);
         mapHeight = mapChoice.getProperties().get("height", Integer.class) * mapChoice.getProperties().get("tileheight", Integer.class);
 
+        //splitscreen
         cameraOne = new OrthographicCamera();
         cameraTwo = new OrthographicCamera();
-
         int screenWidth = Gdx.graphics.getWidth();
         int screenHeight = Gdx.graphics.getHeight();
         viewportOne = new FitViewport(screenWidth / 2, screenHeight, cameraOne);
@@ -191,6 +191,14 @@ public class GameScreen implements Screen{
             obj.draw(batch);
         }
         batch.end();
+
+        if (tankOne.isDead == true){
+            game.setScreen(new EndScreen(game, playerTwo));
+        }
+        if (tankTwo.isDead == true){
+            game.setScreen(new EndScreen(game, playerOne));
+        }
+
     }
 
     @Override

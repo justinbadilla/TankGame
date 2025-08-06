@@ -34,7 +34,7 @@ public class Tank extends GameObject {
 
     int health;
     int lives;
-    boolean isDead;
+    public boolean isDead;
 
 
     public Tank(Texture image, float x, float y, ControlScheme controls){
@@ -154,6 +154,7 @@ public class Tank extends GameObject {
         //end game condition
         if (lives <= 0){
             System.out.println("end game");
+            isDead = true;
         }
     }
 

@@ -2,6 +2,7 @@ package com.sfsu.tankgame.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -144,19 +145,19 @@ public class MapScreen implements Screen{
         batch.draw(mapList[mapChoice].getTexture(), mapX-70, mapY, mapList[mapChoice].getTexture().getWidth()/2, mapList[mapChoice].getTexture().getHeight()/2);
 
         //buttons
-        if(Gdx.input.justTouched()){
-            if(nextHitBox.contains(mouseX, mouseY)){
-                mapChoice++;
-                if(mapChoice >= mapList.length){
+        if(Gdx.input.isKeyJustPressed(Keys.RIGHT)){
+            mapChoice++;
+            if(mapChoice >= mapList.length){
                     mapChoice = 0;
-                }
             }
-            if(previousHitBox.contains(mouseX, mouseY)){
-                mapChoice --;
-                if(mapChoice < 0){
-                    mapChoice = mapList.length - 1;
-                }
+        }
+        if(Gdx.input.isKeyJustPressed(Keys.LEFT)){
+            mapChoice --;
+            if(mapChoice < 0){
+                mapChoice = mapList.length - 1;
             }
+        }
+        if(Gdx.input.justTouched()){
             if(continueHitBox.contains(mouseX, mouseY)){
                 game.setScreen(new GameScreen(game, mapList[mapChoice].getMap(), playerOneTank, playerTwoTank));
             }
