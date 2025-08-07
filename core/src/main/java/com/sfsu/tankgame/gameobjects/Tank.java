@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Tank extends GameObject {
 
-    Texture tankTexture;
+    public Texture tankTexture;
     SpriteBatch tankBatch;
 
     //sound fx
@@ -53,7 +53,7 @@ public class Tank extends GameObject {
         hitbox.setPosition(x, y);
 
         //default health and lives
-        health = 100;
+        health = 200;
         lives = 3;
         isDead = false;
     }
@@ -138,7 +138,7 @@ public class Tank extends GameObject {
                     if (targetTank.health <= 0) {
                         targetTank.lives--;
                         System.out.println("lives: " + targetTank.lives);
-                        targetTank.health = 100;
+                        targetTank.health = health;
 
                         // Respawn
                         targetTank.x = targetTank.spawnX;
@@ -182,5 +182,10 @@ public class Tank extends GameObject {
     public void takeDamage(int amount){
         health -= amount;
     }
-    
+    public int getHealth() {
+        return health;
+    }
+    public int getLives() {
+        return lives;
+    }
 }

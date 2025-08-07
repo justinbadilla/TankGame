@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,12 +21,15 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sfsu.tankgame.ControlScheme;
 import com.sfsu.tankgame.Main;
 import com.sfsu.tankgame.gameobjects.BreakableWall;
 import com.sfsu.tankgame.gameobjects.GameObject;
 import com.sfsu.tankgame.gameobjects.Tank;
 import com.sfsu.tankgame.gameobjects.Wall;
+
+import HUD.HealthBar;
 
 public class GameScreen implements Screen{
 
@@ -56,6 +60,10 @@ public class GameScreen implements Screen{
 
     //game object array for hitboxes and collision
     private List<GameObject>allObjects;
+
+    //HUD
+    HealthBar healthBarOne;
+    HealthBar healthBarTwo;
 
     //player one and two controls
     private ControlScheme playerOneControls = new ControlScheme(Input.Keys.W, Input.Keys.S, Input.Keys.A, Input.Keys.D, Input.Keys.SPACE);
@@ -90,12 +98,17 @@ public class GameScreen implements Screen{
         viewportOne = new FitViewport(screenWidth / 2, screenHeight, cameraOne);
         viewportTwo = new FitViewport(screenWidth / 2, screenHeight, cameraTwo);
 
+
         allObjects = new ArrayList<>();
         batch = new SpriteBatch();
 
         //two tanks
         tankOne = new Tank(playerOne, 400, 400, playerOneControls);
         tankTwo = new Tank (playerTwo, 100, 100, playerTwoControls);
+
+        //HUD
+        healthBarOne = new HealthBar(tankOne);
+        healthBarTwo = new HealthBar(tankTwo);
 
         //map collisions (adding game object unbreakable walls/rectangles to array)
         MapLayer unbreakables = mapChoice.getLayers().get("unbreakables");
@@ -128,11 +141,12 @@ public class GameScreen implements Screen{
         allObjects.add(tankOne);
         allObjects.add(tankTwo);
 
+        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
     }
 
     @Override
-    public void show() {
-    }
+    public void show() {}
 
     @Override
     public void render(float delta) {
@@ -164,6 +178,9 @@ public class GameScreen implements Screen{
         renderer.setView(cameraOne);
         renderer.render();
 
+        //healthbar
+        healthBarOne.render(batch, tankOne.getHealth(), 50, viewportOne.getWorldHeight() -100);
+
         batch.setProjectionMatrix(cameraOne.combined);
         batch.begin();
         for (GameObject obj : allObjects) {
@@ -185,12 +202,18 @@ public class GameScreen implements Screen{
         renderer.setView(cameraTwo);
         renderer.render();
 
+        //healthbar
+        healthBarTwo.render(batch, tankTwo.getHealth(), 50, viewportTwo.getWorldHeight() - 100);
+        
         batch.setProjectionMatrix(cameraTwo.combined);
         batch.begin();
         for (GameObject obj : allObjects) {
             obj.draw(batch);
         }
+
         batch.end();
+
+        //end screen
 
         if (tankOne.isDead == true){
             game.setScreen(new EndScreen(game, playerTwo));
@@ -210,20 +233,25 @@ public class GameScreen implements Screen{
         // viewport positions for split screen
         viewportOne.setScreenBounds(0, 0, width / 2, height);
         viewportTwo.setScreenBounds(width / 2, 0, width / 2, height);
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
 
     }
 
     @Override
-    public void hide() {
+    public void pause() {}
+    @Override
+    public void resume() {}
+    @Override
+    public void hide() {}
 
+    //getters
+    public TiledMap getMapChoice() {
+        return mapChoice;
+    }
+    public Tank getTankOne() {
+        return tankOne;
+    }
+    public Tank getTankTwo() {
+        return tankTwo;
     }
 
     @Override

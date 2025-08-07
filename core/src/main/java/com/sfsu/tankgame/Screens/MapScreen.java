@@ -37,12 +37,10 @@ public class MapScreen implements Screen{
     private Texture nextButton;
     private float nextX;
     private float nextY;
-    private Rectangle nextHitBox;
     //(prev)
     private Texture previousButton;
     private float prevX;
     private float prevY;
-    private Rectangle previousHitBox;
     //(continue)
     private Texture continueButton;
     private float continueX;
@@ -95,14 +93,12 @@ public class MapScreen implements Screen{
         Rectangle nextButtonRect = ((RectangleMapObject) nextButtonObject).getRectangle();
         nextX = nextButtonRect.x;
         nextY = nextButtonRect.y;
-        nextHitBox = new Rectangle(nextX-125, nextY-100, nextButtonRect.getWidth(), nextButtonRect.getHeight());
         //previous button
         previousButton = new Texture("menu/previous.png");
         MapObject prevButtonObject = background.getLayers().get("previousMap").getObjects().get(0);
         Rectangle prevButtonRect = ((RectangleMapObject) prevButtonObject).getRectangle();
         prevX = prevButtonRect.x;
         prevY = prevButtonRect.y;
-        previousHitBox = new Rectangle(prevX-70, prevY-75, prevButtonRect.getWidth(), prevButtonRect.getHeight());
         //continue button
         continueButton = new Texture("menu/continue.png");
         MapObject continueObject = background.getLayers().get("Continue").getObjects().get(0);

@@ -110,6 +110,7 @@ public class EndScreen implements Screen{
         if(Gdx.input.justTouched()){
             if(continueHitBox.contains(mouseX, mouseY)){
                 game.setScreen(new MenuScreen(game));
+
             }
         }
         
@@ -132,8 +133,7 @@ public class EndScreen implements Screen{
     public void hide() {}
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'dispose'");
+
     }
     
 }
