@@ -21,7 +21,7 @@ The jar folder will store the built jar of your term project.
 ## IDE used: Visual Studio Code and IntelliJ
 
 ## Steps to Import project into IDE:
-
+    1. Clone/download project through 
 ## Steps to Build Your Project:
  
 ## Steps to run your Project:
@@ -30,10 +30,12 @@ The jar folder will store the built jar of your term project.
 
 |               | Player 1 | Player 2 |
 |---------------|----------|----------|
-|  Forward      |          |          |
-|  Backward     |          |          |
-|  Rotate left  |          |          |
-|  Rotate Right |          |          |
-|  Shoot        |          |          |
+|  Forward      |    W    |     UP     |
+|  Backward     |    S    |    DOWN    |
+|  Rotate left  |    A    |    LEFT    |
+|  Rotate Right |    D    |    RIGHT   |
+|  Shoot        |  SPACE  |RETURN/ENTER|
 
 <!-- You may add more controls if you need to. -->
+* To cylce through different tank colors use A and D (for player one) and LEFT and RIGHT arrows (for player two)
+* To cycle through maps in map screen, use LEFT and RIGHT arrow keys.
