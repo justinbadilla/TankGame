@@ -18,6 +18,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -102,6 +103,7 @@ public class GameScreen implements Screen{
         allObjects = new ArrayList<>();
         batch = new SpriteBatch();
 
+
         //two tanks
         tankOne = new Tank(playerOne, 400, 400, playerOneControls);
         tankTwo = new Tank (playerTwo, 100, 100, playerTwoControls);
@@ -153,6 +155,9 @@ public class GameScreen implements Screen{
         delta = Gdx.graphics.getDeltaTime();
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
+        //animated tiles
+        AnimatedTiledMapTile.updateAnimationBaseTime();
+
         //game objects
         for (GameObject obj : allObjects) {
             obj.update(delta, allObjects); 
@@ -202,8 +207,7 @@ public class GameScreen implements Screen{
         renderer.setView(cameraTwo);
         renderer.render();
 
-        //healthbar
-        healthBarTwo.render(batch, tankTwo.getHealth(), 50, viewportTwo.getWorldHeight() - 100);
+
         
         batch.setProjectionMatrix(cameraTwo.combined);
         batch.begin();
@@ -212,6 +216,9 @@ public class GameScreen implements Screen{
         }
 
         batch.end();
+
+        //healthbar
+        healthBarTwo.render(batch, tankTwo.getHealth(), 50, viewportTwo.getWorldHeight() - 100);
 
         //end screen
 
@@ -257,7 +264,6 @@ public class GameScreen implements Screen{
     @Override
     public void dispose() {
         batch.dispose();
-        image.dispose();
         music.dispose();
         renderer.dispose();
     }

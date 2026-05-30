@@ -17,6 +17,11 @@ maps/test.png
 maps/test.tmx
 maps/tileset1.tsx
 maps/tilesetprototype_v6.png
+maps/tilesets/ForgottenMemTrees.tsx
+maps/tilesets/ForgottenMemWater.tsx
+maps/tilesets/ForgottenMemories.tsx
+maps/tilesets/ForgottenProps.tsx
+maps/tilesets/Props.png
 maps/tilesets/TX Plant.png
 maps/tilesets/TX Player.png
 maps/tilesets/TX Props.png
@@ -26,6 +31,10 @@ maps/tilesets/TX Struct.png
 maps/tilesets/TX Tileset Grass.png
 maps/tilesets/TX Tileset Stone Ground.png
 maps/tilesets/TX Tileset Wall.png
+maps/tilesets/TileSet.png
+maps/tilesets/Trees.png
+maps/tilesets/Trees_seperated.png
+maps/tilesets/WaterTiles-6frames.png
 maps/tilesets/tileset2a.tsx
 maps/tilesets/tileset2b.tsx
 menu.mp3.asd
