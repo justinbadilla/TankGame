@@ -6,7 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.sfsu.tankgame.ControlScheme;
+
+import com.sfsu.tankgame.Systems.Respawn;
 
 import java.util.List;
 
@@ -25,8 +28,7 @@ public class Tank extends GameObject {
 
     private float prevX, prevY;
 
-    //back to spawn
-    private float spawnX, spawnY;
+    private Respawn respawn;
 
     ArrayList<Bullet> bullets = new ArrayList<>();
 
@@ -37,14 +39,12 @@ public class Tank extends GameObject {
     public boolean isDead;
 
 
-    public Tank(Texture image, float x, float y, ControlScheme controls){
+    public Tank(Texture image, float x, float y, ControlScheme controls, Respawn respawn){
         super(x, y);
         this.tankTexture = image;
         this.controls = controls;
 
-        //spawn coord set?
-        spawnX = x;
-        spawnY = y;
+        this.respawn = respawn;
 
         //setting hitbox/rectangle
         float width = tankTexture.getWidth();
@@ -138,12 +138,16 @@ public class Tank extends GameObject {
                     if (targetTank.health <= 0) {
                         targetTank.lives--;
                         System.out.println("lives: " + targetTank.lives);
-                        targetTank.health = health;
+                        // this tank is the shooter/killer
+                        Vector2 newSpawn = respawn.getFarthestSpawnFrom(this.getPosition());
+
+                        // respawn the dead tank at the safe random spawn
+                        targetTank.respawnAt(newSpawn.x, newSpawn.y);
 
                         // Respawn
-                        targetTank.x = targetTank.spawnX;
-                        targetTank.y = targetTank.spawnY;
-                        targetTank.hitbox.setPosition(targetTank.x, targetTank.y);
+                        //targetTank.x = targetTank.spawnX;
+                        //targetTank.y = targetTank.spawnY;
+                        //targetTank.hitbox.setPosition(targetTank.x, targetTank.y);
                     }
                 }
             }
@@ -177,6 +181,19 @@ public class Tank extends GameObject {
             for (Bullet b: bullets){
                 b.draw(batch);
             }
+    }
+
+    //new spawn
+    public void respawnAt(float x, float y) {
+        this.x = x;
+        this.y = y;
+        this.health = 200;
+        this.hitbox.setPosition(x, y);
+    }
+
+    //postion helper
+    public Vector2 getPosition() {
+        return new Vector2(x, y);
     }
 
     public void takeDamage(int amount){

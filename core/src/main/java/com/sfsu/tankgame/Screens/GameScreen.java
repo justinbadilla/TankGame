@@ -30,6 +30,9 @@ import com.sfsu.tankgame.gameobjects.GameObject;
 import com.sfsu.tankgame.gameobjects.Tank;
 import com.sfsu.tankgame.gameobjects.Wall;
 
+import com.badlogic.gdx.math.Vector2;
+import com.sfsu.tankgame.Systems.Respawn;
+
 import HUD.HealthBar;
 
 public class GameScreen implements Screen{
@@ -61,6 +64,9 @@ public class GameScreen implements Screen{
 
     //game object array for hitboxes and collision
     private List<GameObject>allObjects;
+
+    //respawn
+    private Respawn respawn;
 
     //HUD
     HealthBar healthBarOne;
@@ -103,10 +109,14 @@ public class GameScreen implements Screen{
         allObjects = new ArrayList<>();
         batch = new SpriteBatch();
 
+        //initial spawn
+        respawn = new Respawn(mapChoice);
+        Vector2 tankOneSpawn = respawn.getRandomSpawn();
+        Vector2 tankTwoSpawn = respawn.getFarthestSpawnFrom(tankOneSpawn);
 
-        //two tanks
-        tankOne = new Tank(playerOne, 400, 400, playerOneControls);
-        tankTwo = new Tank (playerTwo, 100, 100, playerTwoControls);
+        tankOne = new Tank(playerOne, tankOneSpawn.x, tankOneSpawn.y, playerOneControls, respawn);
+        tankTwo = new Tank(playerTwo, tankTwoSpawn.x, tankTwoSpawn.y, playerTwoControls, respawn);
+
 
         //HUD
         healthBarOne = new HealthBar(tankOne);
