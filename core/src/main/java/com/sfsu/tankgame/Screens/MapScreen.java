@@ -80,8 +80,8 @@ public class MapScreen implements Screen{
         mapTwo = new TmxMapLoader().load("maps/map 2.tmx");
         mapThree = new TmxMapLoader().load("maps/map 3.tmx");
         mapList = new Maps[3];
-        mapList [0] = new Maps(mapOne, new Texture("maps/map 1.png"));
-        mapList [1] = new Maps(mapTwo, new Texture("maps/map 2.png"));
+        mapList [0] = new Maps(mapTwo, new Texture("maps/map 2.png"));
+        mapList [1] = new Maps(mapOne, new Texture("maps/map 1.png"));
         mapList [2] = new Maps (mapThree, new Texture("maps/map 3.png"));
         //hovering choice
         mapChoice = 0;

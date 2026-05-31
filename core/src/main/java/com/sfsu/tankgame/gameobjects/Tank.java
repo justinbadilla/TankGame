@@ -75,28 +75,46 @@ public class Tank extends GameObject {
         float rad = (float)Math.toRadians(angle);
         float dx = (float)Math.cos(rad);
         float dy = (float)Math.sin(rad);
+        
 
+        float moveDirection = 0f;
 
-
-        if (Gdx.input.isKeyPressed(controls.forwardKey)){
-            x += dx * speed * delta;
-            y += dy * speed * delta;
+        if (Gdx.input.isKeyPressed(controls.forwardKey)) {
+            moveDirection = 1f;
         }
 
-        if (Gdx.input.isKeyPressed(controls.backwardKey)){
-            x -= dx * speed * delta;
-            y -= dy * speed * delta;
+        if (Gdx.input.isKeyPressed(controls.backwardKey)) {
+            moveDirection = -1f;
         }
 
-        //update
+
+        //calculate total movement for this frame
+        float moveX = dx * speed * delta * moveDirection;
+        float moveY = dy * speed * delta * moveDirection;
+
+        //move on X axis first
+        x += moveX;
         hitbox.setPosition(x, y);
 
-        //check collision (if collides, go back to previous postion)
-        for (GameObject other: allObjects){
-            if(other != this && hitbox.overlaps(other.getHitBox())){
-                x =prevX;
-                y =prevY;
+        //if X movement causes collision, undo only X
+        for (GameObject other : allObjects) {
+            if (other != this && hitbox.overlaps(other.getHitBox())) {
+                x -= moveX;
                 hitbox.setPosition(x, y);
+                break;
+            }
+        }
+
+        //move on Y axis second
+        y += moveY;
+        hitbox.setPosition(x, y);
+
+        //if Y movement causes collision, undo only Y
+        for (GameObject other : allObjects) {
+            if (other != this && hitbox.overlaps(other.getHitBox())) {
+                y -= moveY;
+                hitbox.setPosition(x, y);
+                break;
             }
         }
 
