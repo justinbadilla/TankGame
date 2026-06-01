@@ -19,6 +19,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -52,10 +53,8 @@ public class GameScreen implements Screen{
     private Texture playerOne;
     private Texture playerTwo;
     private OrthogonalTiledMapRenderer renderer;
-    private OrthographicCamera cameraOne;
-    private OrthographicCamera cameraTwo;
-    private FitViewport viewportOne;
-    private FitViewport viewportTwo;
+    private OrthographicCamera camera;
+    private FitViewport viewport;
 
     // Map boundaries
     private float mapWidth;
@@ -97,14 +96,9 @@ public class GameScreen implements Screen{
         mapWidth = mapChoice.getProperties().get("width", Integer.class) * mapChoice.getProperties().get("tilewidth", Integer.class);
         mapHeight = mapChoice.getProperties().get("height", Integer.class) * mapChoice.getProperties().get("tileheight", Integer.class);
 
-        //splitscreen
-        cameraOne = new OrthographicCamera();
-        cameraTwo = new OrthographicCamera();
-        int screenWidth = Gdx.graphics.getWidth();
-        int screenHeight = Gdx.graphics.getHeight();
-        viewportOne = new FitViewport(screenWidth / 2, screenHeight, cameraOne);
-        viewportTwo = new FitViewport(screenWidth / 2, screenHeight, cameraTwo);
-
+        //new screen
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
 
         allObjects = new ArrayList<>();
         batch = new SpriteBatch();
@@ -178,57 +172,37 @@ public class GameScreen implements Screen{
             obj instanceof BreakableWall && ((BreakableWall) obj).isDestroyed()
         );
 
-        //camera and map
-        //Left
-        viewportOne.apply();
+        //update one shared camera
+        updateCamera();
 
-        //map bounds for player one
-        float cameraHalfWidth1 = cameraOne.viewportWidth * cameraOne.zoom / 2;
-        float cameraHalfHeight1 = cameraOne.viewportHeight * cameraOne.zoom / 2;
-        float clampedX1 = Math.max(cameraHalfWidth1, Math.min(mapWidth - cameraHalfWidth1, tankOne.getX()));
-        float clampedY1 = Math.max(cameraHalfHeight1, Math.min(mapHeight - cameraHalfHeight1, tankOne.getY()));
-        
-        cameraOne.position.set(clampedX1, clampedY1, 0);
-        cameraOne.update();
-        renderer.setView(cameraOne);
+        //render map once
+        viewport.apply();
+        renderer.setView(camera);
         renderer.render();
 
-        //healthbar
-        healthBarOne.render(batch, tankOne.getHealth(), 50, viewportOne.getWorldHeight() -100);
-
-        batch.setProjectionMatrix(cameraOne.combined);
+        //render all objects once
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        for (GameObject obj : allObjects) {
-            obj.draw(batch);
-        }
-        batch.end();
 
-        //Right
-        viewportTwo.apply();
-
-        //mapbounds
-        float cameraHalfWidth2 = cameraTwo.viewportWidth * cameraTwo.zoom / 2;
-        float cameraHalfHeight2 = cameraTwo.viewportHeight * cameraTwo.zoom / 2;
-        float clampedX2 = Math.max(cameraHalfWidth2, Math.min(mapWidth - cameraHalfWidth2, tankTwo.getX()));
-        float clampedY2 = Math.max(cameraHalfHeight2, Math.min(mapHeight - cameraHalfHeight2, tankTwo.getY()));
-
-        cameraTwo.position.set(clampedX2, clampedY2, 0);
-        cameraTwo.update();
-        renderer.setView(cameraTwo);
-        renderer.render();
-
-
-        
-        batch.setProjectionMatrix(cameraTwo.combined);
-        batch.begin();
         for (GameObject obj : allObjects) {
             obj.draw(batch);
         }
 
         batch.end();
 
-        //healthbar
-        healthBarTwo.render(batch, tankTwo.getHealth(), 50, viewportTwo.getWorldHeight() - 100);
+        healthBarOne.render(
+            camera,
+            tankOne.getHealth(),
+            tankOne.getX() + tankOne.tankTexture.getWidth() / 2f - 20f,
+            tankOne.getY() + tankOne.tankTexture.getHeight() + 20f
+        );
+
+        healthBarTwo.render(
+            camera,
+            tankTwo.getHealth(),
+            tankTwo.getX() + tankTwo.tankTexture.getWidth() / 2f - 20f,
+            tankTwo.getY() + tankTwo.tankTexture.getHeight() + 20f
+        );
 
         //end screen
 
@@ -241,16 +215,53 @@ public class GameScreen implements Screen{
 
     }
 
+    // helper for camera (follows midpoint between tanks and zooms based on distance)
+    private void updateCamera() {
+        float midX = (tankOne.getX() + tankTwo.getX()) / 2f;
+        float midY = (tankOne.getY() + tankTwo.getY()) / 2f;
+
+        float distance = tankOne.getPosition().dst(tankTwo.getPosition());
+
+        float closeZoom = 0.7f;
+        float mediumZoom = 1.0f;
+        float farZoom = 1.3f;
+
+        float maxAllowedZoom = getMaxAllowedZoom();
+        farZoom = Math.min(farZoom, maxAllowedZoom);
+
+        float targetZoom;
+
+        if (distance < 300f) {
+            targetZoom = closeZoom;
+        } else if (distance < 700f) {
+            targetZoom = mediumZoom;
+        } else {
+            targetZoom = farZoom;
+        }
+
+        camera.zoom = MathUtils.lerp(camera.zoom, targetZoom, 0.08f);
+
+        float cameraHalfWidth = camera.viewportWidth * camera.zoom / 2f;
+        float cameraHalfHeight = camera.viewportHeight * camera.zoom / 2f;
+
+        float clampedX = MathUtils.clamp(midX, cameraHalfWidth, mapWidth - cameraHalfWidth);
+        float clampedY = MathUtils.clamp(midY, cameraHalfHeight, mapHeight - cameraHalfHeight);
+
+        camera.position.set(clampedX, clampedY, 0);
+        camera.update();
+    }
+
+    //max zoom
+    private float getMaxAllowedZoom() {
+        float maxZoomX = mapWidth / camera.viewportWidth;
+        float maxZoomY = mapHeight / camera.viewportHeight;
+
+        return Math.min(maxZoomX, maxZoomY);
+    }
+
     @Override
     public void resize(int width, int height) {
-        // viewports to use half the screen width each
-        viewportOne.update(width / 2, height);
-        viewportTwo.update(width / 2, height);
-        
-        // viewport positions for split screen
-        viewportOne.setScreenBounds(0, 0, width / 2, height);
-        viewportTwo.setScreenBounds(width / 2, 0, width / 2, height);
-
+        viewport.update(width, height);
     }
 
     @Override

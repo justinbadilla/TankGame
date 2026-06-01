@@ -26,8 +26,6 @@ public class Tank extends GameObject {
     private float speed = 200f;
     private float rotationSpeed = 200f;
 
-    private float prevX, prevY;
-
     private Respawn respawn;
 
     ArrayList<Bullet> bullets = new ArrayList<>();
@@ -60,9 +58,6 @@ public class Tank extends GameObject {
 
     @Override
     public void update(float delta, List<GameObject> allObjects){
-
-        prevX = x;
-        prevY = y;
 
         if (Gdx.input.isKeyPressed(controls.leftKey)){
             angle += rotationSpeed * delta; 
