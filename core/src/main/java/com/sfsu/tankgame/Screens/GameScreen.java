@@ -45,9 +45,6 @@ public class GameScreen implements Screen{
     private Tank tankOne;
     private Tank tankTwo;
 
-    //music and sounds
-    Music music = Gdx.audio.newMusic(Gdx.files.internal("8-bit When You Sleep.mp3"));
-
     //map and camera
     private TiledMap mapChoice; //choice
     private Texture playerOne;
@@ -86,8 +83,11 @@ public class GameScreen implements Screen{
         game.menuMusic.stop();
 
         //music
-        music.play();
-        music.setLooping(true);
+        game.menuMusic.stop();
+
+        if (!game.gameMusic.isPlaying()) {
+            game.gameMusic.play();
+        }
 
         //map and camera
         renderer = new OrthogonalTiledMapRenderer(mapChoice);
@@ -285,7 +285,6 @@ public class GameScreen implements Screen{
     @Override
     public void dispose() {
         batch.dispose();
-        music.dispose();
         renderer.dispose();
     }
     

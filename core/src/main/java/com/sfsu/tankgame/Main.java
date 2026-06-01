@@ -13,15 +13,18 @@ import com.sfsu.tankgame.Screens.TankScreen;
 public class Main extends Game {
     public SpriteBatch batch;
     public Music menuMusic;
+    public Music gameMusic;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         menuMusic = Gdx.audio.newMusic(Gdx.files.internal("menu.wav"));
         menuMusic.setLooping(true);
-        if (!menuMusic.isPlaying()) {
-            menuMusic.play();
-        }
+        // game music
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("8-bit When You Sleep.mp3"));
+        gameMusic.setLooping(true);
+
+        menuMusic.play();
 
         setScreen(new MenuScreen(this));
     }
@@ -37,6 +40,9 @@ public class Main extends Game {
         batch.dispose();
         if(menuMusic != null){
             menuMusic.dispose();
+        }
+        if(gameMusic != null){
+            gameMusic.dispose();
         }
     }
 }

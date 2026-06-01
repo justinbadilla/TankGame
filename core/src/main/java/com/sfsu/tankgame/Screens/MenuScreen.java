@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sfsu.tankgame.Main;
@@ -110,6 +111,7 @@ public class MenuScreen implements Screen{
 
     @Override
     public void render(float delta) {
+        ScreenUtils.clear(0, 0, 0, 1);
         //frames (beginning logo panning idea)
         camera.update();
         renderer.setView(camera);
@@ -190,5 +192,7 @@ public class MenuScreen implements Screen{
         playButtonClick.dispose();
         exitButtonClick.dispose();
         batch.dispose();
+        renderer.dispose();
+        background.dispose();
     }
 }

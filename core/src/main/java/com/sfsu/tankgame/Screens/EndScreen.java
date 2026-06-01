@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sfsu.tankgame.Main;
@@ -86,6 +87,7 @@ public class EndScreen implements Screen{
 
     @Override
     public void render(float delta) {
+        ScreenUtils.clear(0, 0, 0, 1);
         camera.update();
         renderer.setView(camera);
         renderer.render();
@@ -106,15 +108,21 @@ public class EndScreen implements Screen{
         font.draw(batch, layout, centeredX, 450);
 
         batch.draw(continueButton, continueX - continueButton.getWidth()/2, continueY);
-
-        if(Gdx.input.justTouched()){
-            if(continueHitBox.contains(mouseX, mouseY)){
-                game.setScreen(new MenuScreen(game));
-
-            }
-        }
         
         batch.end();
+            if(Gdx.input.justTouched()){
+                if(continueHitBox.contains(mouseX, mouseY)){
+                    Screen oldScreen = game.getScreen();
+                    game.gameMusic.stop();
+
+                if (!game.menuMusic.isPlaying()) {
+                    game.menuMusic.play();
+                }
+
+                game.setScreen(new MenuScreen(game));
+                oldScreen.dispose();
+            }
+        }
 
     }
 
@@ -133,6 +141,11 @@ public class EndScreen implements Screen{
     public void hide() {}
     @Override
     public void dispose() {
+        continueButton.dispose();
+        font.dispose();
+        batch.dispose();
+        renderer.dispose();
+        background.dispose();
 
     }
     
