@@ -35,6 +35,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.sfsu.tankgame.Systems.Respawn;
 
 import HUD.HealthBar;
+import HUD.HowToPlayOverlay;
 
 public class GameScreen implements Screen{
 
@@ -67,6 +68,7 @@ public class GameScreen implements Screen{
     //HUD
     HealthBar healthBarOne;
     HealthBar healthBarTwo;
+    private HowToPlayOverlay howToPlayOverlay;
 
     //player one and two controls
     private ControlScheme playerOneControls = new ControlScheme(Input.Keys.W, Input.Keys.S, Input.Keys.A, Input.Keys.D, Input.Keys.SPACE);
@@ -115,6 +117,7 @@ public class GameScreen implements Screen{
         //HUD
         healthBarOne = new HealthBar(tankOne);
         healthBarTwo = new HealthBar(tankTwo);
+        howToPlayOverlay = new HowToPlayOverlay();
 
         //map collisions (adding game object unbreakable walls/rectangles to array)
         MapLayer unbreakables = mapChoice.getLayers().get("unbreakables");
@@ -204,6 +207,9 @@ public class GameScreen implements Screen{
             tankTwo.getY() + tankTwo.tankTexture.getHeight() + 20f
         );
 
+        howToPlayOverlay.update(delta);
+        howToPlayOverlay.render();
+
         //end screen
 
         if (tankOne.isDead == true){
@@ -262,6 +268,7 @@ public class GameScreen implements Screen{
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
+        howToPlayOverlay.resize(width, height);
     }
 
     @Override
@@ -286,6 +293,7 @@ public class GameScreen implements Screen{
     public void dispose() {
         batch.dispose();
         renderer.dispose();
+        howToPlayOverlay.dispose();
     }
     
 }
