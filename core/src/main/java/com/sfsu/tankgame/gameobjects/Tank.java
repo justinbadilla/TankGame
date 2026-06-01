@@ -130,6 +130,10 @@ public class Tank extends GameObject {
             b.update(delta, hitbox);
 
             for (GameObject obj : allObjects) {
+                //bullet disappears after bullet overlaps with bullet
+                if (obj instanceof Wall && b.getHitBox().overlaps(obj.getHitBox())){
+                    b.setAlive(false);
+                }
                 // Damage breakable walls
                 if (obj instanceof BreakableWall && b.getHitBox().overlaps(obj.getHitBox())) {
                     ((BreakableWall) obj).takeDamage(b.getDamage());
