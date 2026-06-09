@@ -3,183 +3,180 @@ package com.sfsu.tankgame.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sfsu.tankgame.Main;
 import com.sfsu.tankgame.Maps;
 
+public class MapScreen implements Screen {
 
-public class MapScreen implements Screen{
+    private static final float WORLD_WIDTH = 1600f;
+    private static final float WORLD_HEIGHT = 900f;
 
-    final Main game;
+    private final Main game;
 
-    //screen fade
     private ScreenFade screenFade;
 
     private SpriteBatch batch;
-
-    private TiledMap background;
-    private OrthogonalTiledMapRenderer renderer;
+    private BitmapFont font;
     private OrthographicCamera camera;
-
-    //parameters of player tanks (pass on to gamescreen)
-    Texture playerOneTank;
-    Texture playerTwoTank;
-
-    //button textures and coords
-    //(next)
-    private Texture nextButton;
-    private float nextX;
-    private float nextY;
-    //(prev)
-    private Texture previousButton;
-    private float prevX;
-    private float prevY;
-    //(continue)
-    private Texture continueButton;
-    private float continueX;
-    private float continueY;
-    private Rectangle continueHitBox;
-
-    //map list
-    TiledMap mapOne;
-    TiledMap mapTwo;
-    TiledMap mapThree;
-    int mapChoice;
-    Maps[] mapList;
-    //display map png
-    private float mapX;
-    private float mapY;
-
-    float mouseX;
-    float mouseY;
-
     private Viewport viewport;
 
-    public MapScreen(Texture playerOneTank, Texture playerTwoTank, Main game){
+    private Texture playerOneTank;
+    private Texture playerTwoTank;
+
+    private TiledMap mapOne;
+    private TiledMap mapTwo;
+    private TiledMap mapThree;
+
+    private Maps[] mapList;
+    private Rectangle[] mapHitBoxes;
+
+    private int hoveredMap = -1;
+
+    public MapScreen(Texture playerOneTank, Texture playerTwoTank, Main game) {
         this.playerOneTank = playerOneTank;
         this.playerTwoTank = playerTwoTank;
         this.game = game;
-        viewport = new FitViewport(1600, 900, new OrthographicCamera());
 
-        //screen fade
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+
+        batch = new SpriteBatch();
+
+        font = new BitmapFont();
+        font.getData().setScale(3f);
+
         screenFade = new ScreenFade(0.75f);
 
-        background = new TmxMapLoader().load("menu/menuBackground.tmx");
-        
-        renderer = new OrthogonalTiledMapRenderer(background);
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1600, 900);
-        renderer.setView(camera);
-
-        //maplist logic
         mapOne = new TmxMapLoader().load("maps/map 1.tmx");
         mapTwo = new TmxMapLoader().load("maps/map 2.tmx");
         mapThree = new TmxMapLoader().load("maps/map 3.tmx");
+
         mapList = new Maps[3];
-        mapList [0] = new Maps(mapTwo, new Texture("maps/map 2.png"));
-        mapList [1] = new Maps(mapOne, new Texture("maps/map 1.png"));
-        mapList [2] = new Maps (mapThree, new Texture("maps/map 3.png"));
-        //hovering choice
-        mapChoice = 0;
+        mapList[0] = new Maps(mapOne, new Texture("maps/map 1.png"));
+        mapList[1] = new Maps(mapTwo, new Texture("maps/map 2.png"));
+        mapList[2] = new Maps(mapThree, new Texture("maps/map 3.png"));
 
-        //buttons
-        //next buttion
-        nextButton = new Texture("menu/next.png");
-        MapObject nextButtonObject = background.getLayers().get("nextMap").getObjects().get(0);
-        Rectangle nextButtonRect = ((RectangleMapObject) nextButtonObject).getRectangle();
-        nextX = nextButtonRect.x;
-        nextY = nextButtonRect.y;
-        //previous button
-        previousButton = new Texture("menu/previous.png");
-        MapObject prevButtonObject = background.getLayers().get("previousMap").getObjects().get(0);
-        Rectangle prevButtonRect = ((RectangleMapObject) prevButtonObject).getRectangle();
-        prevX = prevButtonRect.x;
-        prevY = prevButtonRect.y;
-        //continue button
-        continueButton = new Texture("menu/continue.png");
-        MapObject continueObject = background.getLayers().get("Continue").getObjects().get(0);
-        Rectangle continueRect = ((RectangleMapObject) continueObject).getRectangle();
-        continueX = continueRect.x;
-        continueY = continueRect.y;
-        continueHitBox = new Rectangle(continueX, continueY, continueRect.getWidth(), continueRect.getHeight());
-
-        //display map
-        MapObject mapObject = background.getLayers().get("mapImage").getObjects().get(0);
-        Rectangle mapRect = ((RectangleMapObject) mapObject).getRectangle();
-        mapX = mapRect.x;
-        mapY = mapRect.y;
-
-        batch = new SpriteBatch();
+        createMapHitBoxes();
     }
+
+    private void createMapHitBoxes() {
+        mapHitBoxes = new Rectangle[3];
+
+        float mapWidth = 360f;
+        float mapHeight = 260f;
+        float mapY = 330f;
+
+        float leftCenterX = WORLD_WIDTH * 0.25f;
+        float middleCenterX = WORLD_WIDTH * 0.50f;
+        float rightCenterX = WORLD_WIDTH * 0.75f;
+
+        mapHitBoxes[0] = new Rectangle(leftCenterX - mapWidth / 2f, mapY, mapWidth, mapHeight);
+        mapHitBoxes[1] = new Rectangle(middleCenterX - mapWidth / 2f, mapY, mapWidth, mapHeight);
+        mapHitBoxes[2] = new Rectangle(rightCenterX - mapWidth / 2f, mapY, mapWidth, mapHeight);
+    }   
 
     @Override
-    public void show() {
-    }
+    public void show() {}
 
     @Override
     public void render(float delta) {
+        ScreenUtils.clear(0, 0, 0, 1);
+
+        handleInput();
+
         camera.update();
-        renderer.setView(camera);
-        renderer.render();
-
-        //mouse things
-        float mouseX = Gdx.input.getX();
-        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        batch.draw(nextButton, nextX-100, nextY);
-        batch.draw(previousButton, prevX-100, prevY);
-        batch.draw(continueButton, continueX+60, continueY);
 
-        //initial map
-        batch.draw(mapList[mapChoice].getTexture(), mapX-70, mapY, mapList[mapChoice].getTexture().getWidth()/2, mapList[mapChoice].getTexture().getHeight()/2);
+        drawCenteredText("CHOOSE YOUR MAP", WORLD_WIDTH / 2f, 800f);
 
-        //buttons
-        if(Gdx.input.isKeyJustPressed(Keys.RIGHT)){
-            mapChoice++;
-            if(mapChoice >= mapList.length){
-                    mapChoice = 0;
-            }
+        for (int i = 0; i < mapList.length; i++) {
+            drawMapCard(i);
         }
-        if(Gdx.input.isKeyJustPressed(Keys.LEFT)){
-            mapChoice --;
-            if(mapChoice < 0){
-                mapChoice = mapList.length - 1;
-            }
-        }
-        if(Gdx.input.justTouched()){
-            if(continueHitBox.contains(mouseX, mouseY)){
-                game.setScreen(new GameScreen(game, mapList[mapChoice].getMap(), playerOneTank, playerTwoTank));
-            }
-        }
+
+        drawCenteredText("Press ESC to go back", WORLD_WIDTH / 2f, 120f);
 
         batch.end();
 
-        //go back
+        screenFade.renderFadeIn(delta, camera, WORLD_WIDTH, WORLD_HEIGHT);
+    }
+
+    private void handleInput() {
+        Vector2 mouse = viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+
+        hoveredMap = -1;
+
+        for (int i = 0; i < mapHitBoxes.length; i++) {
+            if (mapHitBoxes[i].contains(mouse)) {
+                hoveredMap = i;
+                break;
+            }
+        }
+
+        if (Gdx.input.justTouched() && hoveredMap != -1) {
+            game.setScreen(new GameScreen(
+                game,
+                mapList[hoveredMap].getMap(),
+                playerOneTank,
+                playerTwoTank
+            ));
+        }
+
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             game.setScreen(new TankScreen(game));
-            dispose();
         }
-        
-        screenFade.renderFadeIn(delta, camera, 1600, 900);
+    }
+
+    private void drawMapCard(int index) {
+        Rectangle box = mapHitBoxes[index];
+        Texture mapTexture = mapList[index].getTexture();
+
+        boolean isHovered = index == hoveredMap;
+
+        float scale = isHovered ? 1.10f : 1.0f;
+
+        float drawWidth = box.width * scale;
+        float drawHeight = box.height * scale;
+
+        float drawX = box.x + box.width / 2f - drawWidth / 2f;
+        float drawY = box.y + box.height / 2f - drawHeight / 2f;
+
+        if (isHovered) {
+            batch.setColor(Color.WHITE);
+        } else {
+            batch.setColor(0.25f, 0.25f, 0.25f, 1f);
+        }
+
+        batch.draw(mapTexture, drawX, drawY, drawWidth, drawHeight);
+
+        batch.setColor(Color.WHITE);
+
+        String label = "MAP " + (index + 1);
+        drawCenteredText(label, box.x + box.width / 2f, box.y - 35f);
+    }
+
+    private void drawCenteredText(String text, float centerX, float y) {
+        GlyphLayout layout = new GlyphLayout(font, text);
+        font.draw(batch, layout, centerX - layout.width / 2f, y);
     }
 
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-        camera.setToOrtho(false, viewport.getWorldWidth(), viewport.getWorldHeight());
     }
 
     @Override
@@ -193,6 +190,12 @@ public class MapScreen implements Screen{
 
     @Override
     public void dispose() {
+        batch.dispose();
+        font.dispose();
         screenFade.dispose();
+
+        for (Maps map : mapList) {
+            map.getTexture().dispose();
+        }
     }
 }
