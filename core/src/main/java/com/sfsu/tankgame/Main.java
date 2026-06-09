@@ -3,6 +3,7 @@ package com.sfsu.tankgame;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sfsu.tankgame.Screens.EndScreen;
@@ -12,6 +13,7 @@ import com.sfsu.tankgame.Screens.TankScreen;
 
 public class Main extends Game {
     public SpriteBatch batch;
+    public Sound clickSound;
     public Music menuMusic;
     public Music gameMusic;
 
@@ -23,6 +25,9 @@ public class Main extends Game {
         // game music
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal("8-bit When You Sleep.mp3"));
         gameMusic.setLooping(true);
+        clickSound = Gdx.audio.newSound(
+            Gdx.files.internal("ClickSound.mp3")
+        );
 
         menuMusic.play();
 
@@ -38,6 +43,7 @@ public class Main extends Game {
     @Override
     public void dispose() {
         batch.dispose();
+        clickSound.dispose();
         if(menuMusic != null){
             menuMusic.dispose();
         }

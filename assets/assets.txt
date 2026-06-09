@@ -1,4 +1,5 @@
 8-bit When You Sleep.mp3
+ClickSound.mp3
 blue tank.png
 breakable.png
 bullet.jpg

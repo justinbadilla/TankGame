@@ -174,6 +174,7 @@ public class TankScreen implements Screen {
             } else if (p2NextHitBox.contains(mouse)) {
                 playerTwoChoice = nextChoice(playerTwoChoice);
             } else if (continueHitBox.contains(mouse)) {
+                game.clickSound.play(0.4f);
                 game.setScreen(new MapScreen(
                     tankTextures[playerOneChoice],
                     tankTextures[playerTwoChoice],

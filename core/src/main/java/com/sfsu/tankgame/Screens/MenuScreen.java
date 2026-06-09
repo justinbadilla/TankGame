@@ -21,7 +21,6 @@ import com.sfsu.tankgame.Main;
 public class MenuScreen implements Screen{
     
     private final Main game;
-    private Sound clickSound;
     private SpriteBatch batch;
 
     private TiledMap background;
@@ -161,6 +160,7 @@ public class MenuScreen implements Screen{
 
         if(showButtons && Gdx.input.justTouched()){
             if(playHitbox.contains(mouseX, mouseY)){
+                game.clickSound.play(0.4f);
                 game.setScreen(new TankScreen(game));
             }
             if(exitHitbox.contains(mouseX, mouseY)){

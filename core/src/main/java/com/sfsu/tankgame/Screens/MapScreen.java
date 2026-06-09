@@ -128,6 +128,7 @@ public class MapScreen implements Screen {
         }
 
         if (Gdx.input.justTouched() && hoveredMap != -1) {
+            game.clickSound.play(0.4f);
             game.setScreen(new GameScreen(
                 game,
                 mapList[hoveredMap].getMap(),
