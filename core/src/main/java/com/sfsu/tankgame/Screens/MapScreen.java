@@ -22,6 +22,9 @@ public class MapScreen implements Screen{
 
     final Main game;
 
+    //screen fade
+    private ScreenFade screenFade;
+
     private SpriteBatch batch;
 
     private TiledMap background;
@@ -67,6 +70,9 @@ public class MapScreen implements Screen{
         this.playerTwoTank = playerTwoTank;
         this.game = game;
         viewport = new FitViewport(1600, 900, new OrthographicCamera());
+
+        //screen fade
+        screenFade = new ScreenFade(0.75f);
 
         background = new TmxMapLoader().load("menu/menuBackground.tmx");
         
@@ -160,6 +166,14 @@ public class MapScreen implements Screen{
         }
 
         batch.end();
+
+        //go back
+        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+            game.setScreen(new TankScreen(game));
+            dispose();
+        }
+        
+        screenFade.renderFadeIn(delta, camera, 1600, 900);
     }
 
     @Override
@@ -179,6 +193,6 @@ public class MapScreen implements Screen{
 
     @Override
     public void dispose() {
-;
+        screenFade.dispose();
     }
 }

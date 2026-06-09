@@ -5,228 +5,264 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sfsu.tankgame.Main;
 
+public class TankScreen implements Screen {
 
-public class TankScreen implements Screen{
+    //screen fade
+    private ScreenFade screenFade;
 
-    final Main game;
+    private static final float WORLD_WIDTH = 1600f;
+    private static final float WORLD_HEIGHT = 900f;
+
+    private final Main game;
+
     private SpriteBatch batch;
-
-    private TiledMap background;
-    private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
+    private Viewport viewport;
+    private BitmapFont font;
 
-    //array of tanks
     private Texture[] tankTextures;
-    //player choice (using array)
     private int playerOneChoice;
     private int playerTwoChoice;
 
-    //button textures and coords
     private Texture nextButton;
-    private Texture previewButton;
+    private Texture prevButton;
     private Texture continueButton;
-    private float continueX;
-    private float continueY;
+
+    private Rectangle p1NextHitBox;
+    private Rectangle p1PrevHitBox;
+    private Rectangle p2NextHitBox;
+    private Rectangle p2PrevHitBox;
     private Rectangle continueHitBox;
-    //Player One buttons
-    private float nextOneX;
-    private float nextOneY;
-    private float prevOneX;
-    private float prevOneY;
-    //Player Two Buttons
-    private float nextTwoX;
-    private float nextTwoY;
-    private float prevTwoX;
-    private float prevTwoY;
-    //tank one display
-    private float tankOneDisplayX;
-    private float tankOneDisplayY;
-    //tank two display
-    private float tankTwoDisplayX;
-    private float tankTwoDisplayY;
 
-    //button hitboxes
-    //for P1
-    Rectangle nextOneHitBox;
-    Rectangle prevOneHitBox;
-    //forP2
-    Rectangle nextTwoHitBox;
-    Rectangle prevTwoHitBox;
+    private float rotation;
 
-    //mouse
-    float mouseX;
-    float mouseY;
-
-    private Viewport viewport;
-
-    public TankScreen(Main game){
+    public TankScreen(Main game) {
         this.game = game;
-        viewport = new FitViewport(1600, 900, new OrthographicCamera());
 
-        //background and buttons
-        background = new TmxMapLoader().load("menu/menuBackground.tmx");
+        //screen fade
+        screenFade = new ScreenFade(0.75f);
+
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+        batch = new SpriteBatch();
+
+        font = new BitmapFont();
+        font.getData().setScale(3f);
+
         nextButton = new Texture("menu/next.png");
-        previewButton = new Texture("menu/previous.png");
+        prevButton = new Texture("menu/previous.png");
         continueButton = new Texture("menu/continue.png");
 
-        //button "hitboxes"
-        //next button for player one
-        MapObject nextOneObject = background.getLayers().get("nextOne").getObjects().get(0);
-        Rectangle nextRectOne = ((RectangleMapObject) nextOneObject).getRectangle();
-        nextOneX = nextRectOne.x;
-        nextOneY = nextRectOne.y;
-        nextOneHitBox = new Rectangle(nextOneX-100, nextOneY-75, nextRectOne.getWidth(), nextRectOne.getHeight());
-        //prev button for player one
-        MapObject prevOneObject = background.getLayers().get("prevOne").getObjects().get(0);
-        Rectangle prevRectOne = ((RectangleMapObject) prevOneObject).getRectangle();
-        prevOneX = prevRectOne.x;
-        prevOneY = prevRectOne.y;
-        prevOneHitBox = new Rectangle(prevOneX-70, prevOneY-70, prevRectOne.getWidth(), prevRectOne.getHeight());
-        //next button for player two
-        MapObject nextTwoObject = background.getLayers().get("nextTwo").getObjects().get(0);
-        Rectangle nextRectTwo = ((RectangleMapObject) nextTwoObject).getRectangle();
-        nextTwoX = nextRectTwo.x;
-        nextTwoY = nextRectTwo.y;
-        nextTwoHitBox = new Rectangle(nextTwoX-100, nextTwoY-30, nextRectTwo.getWidth(), nextRectTwo.getHeight());
-        //prev button for player two
-        MapObject prevTwoObject = background.getLayers().get("prevTwo").getObjects().get(0);
-        Rectangle prevRectTwo = ((RectangleMapObject) prevTwoObject).getRectangle();
-        prevTwoX = prevRectTwo.x;
-        prevTwoY = prevRectTwo.y;
-        prevTwoHitBox = new Rectangle(prevTwoX-70, prevTwoY-30, prevRectTwo.getWidth(), prevRectTwo.getHeight());
-        //tank one display
-        MapObject tankOneObject = background.getLayers().get("TankOne").getObjects().get(0);
-        Rectangle tankOneRect = ((RectangleMapObject) tankOneObject).getRectangle();
-        tankOneDisplayX = tankOneRect.x;
-        tankOneDisplayY = tankOneRect.y;
-        //tank two display
-        MapObject tankTwoObject = background.getLayers().get("TankTwo").getObjects().get(0);
-        Rectangle tankTwoRect = ((RectangleMapObject) tankTwoObject).getRectangle();
-        tankTwoDisplayX = tankTwoRect.x;
-        tankTwoDisplayY = tankTwoRect.y;
-        //continue
-        MapObject continueObject = background.getLayers().get("Continue").getObjects().get(0);
-        Rectangle continueRect = ((RectangleMapObject) continueObject).getRectangle();
-        continueX = continueRect.x;
-        continueY = continueRect.y;
-        continueHitBox = new Rectangle(continueX, continueY, continueRect.getWidth(), continueRect.getHeight());
-
-        //tank array (with texture and image)
         tankTextures = new Texture[4];
         tankTextures[0] = new Texture("red tank.png");
         tankTextures[1] = new Texture("blue tank.png");
-        tankTextures[2] =new Texture("grey tank.png");
+        tankTextures[2] = new Texture("grey tank.png");
         tankTextures[3] = new Texture("navy tank.png");
-        //choice
+
         playerOneChoice = 0;
-        playerTwoChoice = 0;
+        playerTwoChoice = 1;
 
-        renderer = new OrthogonalTiledMapRenderer(background);
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1600, 900);
-        renderer.setView(camera);
+        createHitBoxes();
+    }
 
-        batch = new SpriteBatch();
+    private void createHitBoxes() {
+        float p1CenterX = WORLD_WIDTH * 0.28f;
+        float p2CenterX = WORLD_WIDTH * 0.72f;
+
+        float arrowY = 185f;
+        float arrowSpacing = 180f;
+
+        p1PrevHitBox = new Rectangle(p1CenterX - arrowSpacing - 50f, arrowY, 100f, 100f);
+        p1NextHitBox = new Rectangle(p1CenterX + arrowSpacing - 50f, arrowY, 100f, 100f);
+
+        p2PrevHitBox = new Rectangle(p2CenterX - arrowSpacing - 50f, arrowY, 100f, 100f);
+        p2NextHitBox = new Rectangle(p2CenterX + arrowSpacing - 50f, arrowY, 100f, 100f);
+
+        float continueWidth = continueButton.getWidth();
+        float continueHeight = continueButton.getHeight();
+
+        continueHitBox = new Rectangle(
+            WORLD_WIDTH / 2f - continueWidth / 2f,
+            60f,
+            continueWidth,
+            continueHeight
+        );
     }
 
     @Override
-    public void show() {
-    }
+    public void show() {}
 
     @Override
     public void render(float delta) {
+        ScreenUtils.clear(0, 0, 0, 1);
+
+        rotation -= 45f * delta;
+
+        handleInput();
+
         camera.update();
-        renderer.setView(camera);
-        renderer.render();
-
-        //mouse
-        mouseX = Gdx.input.getX();
-        mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
 
-        //button print
-        batch.draw(nextButton, nextOneX - 100, nextOneY);
-        batch.draw(previewButton, prevOneX-100, prevOneY);
-        batch.draw(nextButton, nextTwoX-100, nextTwoY);
-        batch.draw(previewButton, prevTwoX-100, prevTwoY);
-        batch.draw(continueButton, continueX+60, continueY);
+        drawTitle("CHOOSE YOUR TANKS", WORLD_WIDTH / 2f, 820f);
 
-        //show initial tanks
-        batch.draw(tankTextures[playerOneChoice], tankOneDisplayX+40, tankOneDisplayY+45);
-        batch.draw(tankTextures[playerTwoChoice], tankTwoDisplayX+40, tankTwoDisplayY+45);
+        drawTitle("PLAYER 1", WORLD_WIDTH * 0.28f, 710f);
+        drawTitle("PLAYER 2", WORLD_WIDTH * 0.72f, 710f);
 
-        //button logic
-        if(Gdx.input.isKeyJustPressed(Keys.RIGHT)){
-            //player1
-            playerOneChoice ++;
-            if(playerOneChoice >= tankTextures.length){
-                playerOneChoice = 0;
-            }
-        }
-        if(Gdx.input.isKeyJustPressed(Keys.LEFT)){
-            playerOneChoice--;
-            if(playerOneChoice <0){
-                playerOneChoice = tankTextures.length-1;
-            }
-        }
-            //player2
-        if(Gdx.input.isKeyJustPressed(Keys.D)){
-            playerTwoChoice ++;
-            if(playerTwoChoice >= tankTextures.length){
-                playerTwoChoice = 0;
-            }
-        }
-        if(Gdx.input.isKeyJustPressed(Keys.A)){
-            playerTwoChoice--;
-            if(playerTwoChoice <0){
-                playerTwoChoice = tankTextures.length-1;
-            }
-        }
-        if (Gdx.input.justTouched()){
-            if(continueHitBox.contains(mouseX, mouseY)){
-                game.setScreen(new MapScreen(tankTextures[playerOneChoice], tankTextures[playerTwoChoice], game));
-            }
-        }
+        drawCenteredRotated(
+            tankTextures[playerOneChoice],
+            WORLD_WIDTH * 0.28f,
+            470f,
+            3.5f,
+            rotation
+        );
 
-    
+        drawCenteredRotated(
+            tankTextures[playerTwoChoice],
+            WORLD_WIDTH * 0.72f,
+            470f,
+            3.5f,
+            rotation
+        );
+
+        drawButton(prevButton, p1PrevHitBox);
+        drawButton(nextButton, p1NextHitBox);
+
+        drawButton(prevButton, p2PrevHitBox);
+        drawButton(nextButton, p2NextHitBox);
+
+        batch.draw(
+            continueButton,
+            continueHitBox.x,
+            continueHitBox.y,
+            continueHitBox.width,
+            continueHitBox.height
+        );
 
         batch.end();
+
+        //go back
+        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+            game.setScreen(new MenuScreen(game));
+            dispose();
+        }
+        screenFade.renderFadeIn(delta, camera, 1600, 900);
     }
 
+    private void handleInput() {
+        if (Gdx.input.justTouched()) {
+            Vector2 mouse = viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+
+            if (p1PrevHitBox.contains(mouse)) {
+                playerOneChoice = previousChoice(playerOneChoice);
+            } else if (p1NextHitBox.contains(mouse)) {
+                playerOneChoice = nextChoice(playerOneChoice);
+            } else if (p2PrevHitBox.contains(mouse)) {
+                playerTwoChoice = previousChoice(playerTwoChoice);
+            } else if (p2NextHitBox.contains(mouse)) {
+                playerTwoChoice = nextChoice(playerTwoChoice);
+            } else if (continueHitBox.contains(mouse)) {
+                game.setScreen(new MapScreen(
+                    tankTextures[playerOneChoice],
+                    tankTextures[playerTwoChoice],
+                    game
+                ));
+            }
+        }
+    }
+
+    private int nextChoice(int choice) {
+        choice++;
+        if (choice >= tankTextures.length) {
+            choice = 0;
+        }
+        return choice;
+    }
+
+    private int previousChoice(int choice) {
+        choice--;
+        if (choice < 0) {
+            choice = tankTextures.length - 1;
+        }
+        return choice;
+    }
+
+    private void drawButton(Texture texture, Rectangle box) {
+        batch.draw(texture, box.x, box.y, box.width, box.height);
+    }
+
+    private void drawTitle(String text, float centerX, float y) {
+        GlyphLayout layout = new GlyphLayout(font, text);
+        font.draw(batch, layout, centerX - layout.width / 2f, y);
+    }
+
+    private void drawCenteredRotated(Texture texture, float centerX, float centerY, float scale, float rotation) {
+        float width = texture.getWidth();
+        float height = texture.getHeight();
+
+        float drawWidth = width * scale;
+        float drawHeight = height * scale;
+
+        float drawX = centerX - drawWidth / 2f;
+        float drawY = centerY - drawHeight / 2f;
+
+        batch.draw(
+            texture,
+            drawX,
+            drawY,
+            drawWidth / 2f,
+            drawHeight / 2f,
+            drawWidth,
+            drawHeight,
+            1f,
+            1f,
+            rotation,
+            0,
+            0,
+            texture.getWidth(),
+            texture.getHeight(),
+            false,
+            false
+        );
+    }
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-        camera.setToOrtho(false, viewport.getWorldWidth(), viewport.getWorldHeight());
     }
 
     @Override
     public void pause() {}
+
     @Override
     public void resume() {}
+
     @Override
     public void hide() {}
 
     @Override
     public void dispose() {
         batch.dispose();
-        background.dispose();;
-        nextButton.dispose();
-        previewButton.dispose();
+        font.dispose();
 
+        nextButton.dispose();
+        prevButton.dispose();
+        continueButton.dispose();
+        screenFade.dispose();
+
+        for (Texture texture : tankTextures) {
+            texture.dispose();
+        }
     }
-    
 }
