@@ -4,6 +4,9 @@ blue tank.png
 breakable.png
 bullet.jpg
 grey tank.png
+hs_err_pid23451.log
+hs_err_pid23670.log
+hs_err_pid23957.log
 libgdx.png
 maps/TX Tileset Wall.tsx
 maps/map 1.png

@@ -156,7 +156,7 @@ public class TankScreen implements Screen {
         //go back
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             game.setScreen(new MenuScreen(game));
-            dispose();
+            return;
         }
         screenFade.renderFadeIn(delta, camera, 1600, 900);
     }

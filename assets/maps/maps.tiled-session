@@ -8,6 +8,15 @@
         "."
     ],
     "fileStates": {
+        "/Users/justinbadilla/School Projects/tankgame-justinbadilla/assets/maps/tileset1.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/justinbadilla/School Projects/tankgame-justinbadilla/assets/maps/tilesets/tileset2a.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/justinbadilla/School Projects/tankgame-justinbadilla/assets/maps/tilesets/tileset2b.tsx": {
+            "scaleInDock": 1
+        },
         "/Users/justinbadilla/School Projects/tankgame-justinbadilla/assets/menu/menuBackground.tmx": {
             "expandedObjectLayers": [
                 10,

@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -59,6 +60,21 @@ public class MenuScreen implements Screen{
     float mouseY;
 
     private Viewport viewport;
+
+    //animated tanks
+    // animated background tanks
+    private Texture[] menuTankTextures;
+
+    private Texture leftDrivingTank;
+    private Texture rightDrivingTank;
+
+    private float leftTankY;
+    private float rightTankY;
+
+    private float leftTankSpeed = 150f;
+    private float rightTankSpeed = 150f;
+
+    private float tankScale = 1.5f;
     
 
     public MenuScreen(Main game){
@@ -100,6 +116,19 @@ public class MenuScreen implements Screen{
         camera.setToOrtho(false, 1600, 900);
         renderer.setView(camera);
 
+        //animated tanks
+        menuTankTextures = new Texture[4];
+        menuTankTextures[0] = new Texture("red tank.png");
+        menuTankTextures[1] = new Texture("blue tank.png");
+        menuTankTextures[2] = new Texture("grey tank.png");
+        menuTankTextures[3] = new Texture("navy tank.png");
+
+        leftDrivingTank = getRandomMenuTank();
+        rightDrivingTank = getRandomMenuTank();
+
+        leftTankY = -250f;
+        rightTankY = 1150f;
+
         batch = new SpriteBatch();
         
     }
@@ -140,7 +169,13 @@ public class MenuScreen implements Screen{
 
         batch.setProjectionMatrix(camera.combined);
 
+        //animated tanks
+        updateMenuTanks(delta);
+
         batch.begin();
+
+        //animated tanks
+        drawMenuTanks();
 
         delayLogoTimer += delta;
         if(delayLogoTimer >= 4f){
@@ -171,6 +206,68 @@ public class MenuScreen implements Screen{
         batch.end();
     }
 
+    //helper functions
+    private Texture getRandomMenuTank() {
+        int randomIndex = MathUtils.random(0, menuTankTextures.length - 1);
+        return menuTankTextures[randomIndex];
+    }
+
+    private void updateMenuTanks(float delta) {
+        leftTankY += leftTankSpeed * delta;
+        rightTankY -= rightTankSpeed * delta;
+
+        float leftTankHeight = leftDrivingTank.getHeight() * tankScale;
+        float rightTankHeight = rightDrivingTank.getHeight() * tankScale;
+
+        if (leftTankY > 900f + leftTankHeight) {
+            leftTankY = -leftTankHeight - MathUtils.random(200f, 1800f);
+            leftDrivingTank = getRandomMenuTank();
+        }
+
+        if (rightTankY < -rightTankHeight) {
+            rightTankY = 900f + rightTankHeight + MathUtils.random(200f, 1800f);
+            rightDrivingTank = getRandomMenuTank();
+        }
+    }
+
+    private void drawMenuTanks() {
+        float leftX = 300f;
+        float rightX = 1250f;
+
+        drawCenteredRotated(leftDrivingTank, leftX, leftTankY, tankScale, 90f);
+        drawCenteredRotated(rightDrivingTank, rightX, rightTankY, tankScale, -90f);
+    }
+
+    private void drawCenteredRotated(Texture texture, float centerX, float centerY, float scale, float rotation) {
+        float width = texture.getWidth();
+        float height = texture.getHeight();
+
+        float drawWidth = width * scale;
+        float drawHeight = height * scale;
+
+        float drawX = centerX - drawWidth / 2f;
+        float drawY = centerY - drawHeight / 2f;
+
+        batch.draw(
+            texture,
+            drawX,
+            drawY,
+            drawWidth / 2f,
+            drawHeight / 2f,
+            drawWidth,
+            drawHeight,
+            1f,
+            1f,
+            rotation,
+            0,
+            0,
+            texture.getWidth(),
+            texture.getHeight(),
+            false,
+            false
+        );
+    }
+
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
@@ -194,5 +291,8 @@ public class MenuScreen implements Screen{
         batch.dispose();
         renderer.dispose();
         background.dispose();
+        for (Texture texture : menuTankTextures) {
+            texture.dispose();
+        }
     }
 }
