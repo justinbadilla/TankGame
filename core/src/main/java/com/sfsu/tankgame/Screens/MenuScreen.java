@@ -118,10 +118,10 @@ public class MenuScreen implements Screen{
 
         //animated tanks
         menuTankTextures = new Texture[4];
-        menuTankTextures[0] = new Texture("red tank.png");
-        menuTankTextures[1] = new Texture("blue tank.png");
-        menuTankTextures[2] = new Texture("grey tank.png");
-        menuTankTextures[3] = new Texture("navy tank.png");
+        menuTankTextures[0] = game.redTank;
+        menuTankTextures[1] = game.blueTank;
+        menuTankTextures[2] = game.greyTank;
+        menuTankTextures[3] = game.navyTank;
 
         leftDrivingTank = getRandomMenuTank();
         rightDrivingTank = getRandomMenuTank();
@@ -291,8 +291,5 @@ public class MenuScreen implements Screen{
         batch.dispose();
         renderer.dispose();
         background.dispose();
-        for (Texture texture : menuTankTextures) {
-            texture.dispose();
-        }
     }
 }

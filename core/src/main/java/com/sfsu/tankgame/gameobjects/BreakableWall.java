@@ -12,14 +12,15 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class BreakableWall extends GameObject {
 
-    Texture breakableWall = new Texture("breakable.png");
+    private Texture breakableWallTexture;
+
     private int health = 10;
     private boolean destroyed = false;
 
-    public BreakableWall(Rectangle hitbox){
+    public BreakableWall(Rectangle hitbox, Texture breakableWallTexture){
         super(hitbox.x, hitbox.y);
         this.hitbox = hitbox;
-
+        this.breakableWallTexture = breakableWallTexture;
     }
 
     @Override
@@ -43,17 +44,11 @@ public class BreakableWall extends GameObject {
         if(!destroyed){
 
             batch.draw(
-            breakableWall,
+            breakableWallTexture,
             hitbox.x, hitbox.y
             );
         }
         
-    }
+    }   
 
-    public void dispose(){
-        breakableWall.dispose();
-    }
-
-    
-    
 }

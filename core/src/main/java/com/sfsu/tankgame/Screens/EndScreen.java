@@ -112,17 +112,18 @@ public class EndScreen implements Screen{
         batch.end();
             if(Gdx.input.justTouched()){
                 if(continueHitBox.contains(mouseX, mouseY)){
-                    Screen oldScreen = game.getScreen();
+
                     game.gameMusic.stop();
 
                 if (!game.menuMusic.isPlaying()) {
+                    
                     game.menuMusic.play();
                 }
 
                 game.setScreen(new MenuScreen(game));
-                oldScreen.dispose();
+                return;
+                }
             }
-        }
 
     }
 

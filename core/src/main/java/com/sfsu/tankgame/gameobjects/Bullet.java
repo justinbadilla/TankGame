@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Bullet extends GameObject {
 
-    Texture bulletTexture = new Texture("bullet.jpg");
+    private Texture bulletTexture;
 
     float speed = 400f;
 
@@ -19,10 +19,11 @@ public class Bullet extends GameObject {
 
     Tank shooter;
 
-    public Bullet(float x, float y, float angle, Tank shooter){
+    public Bullet(float x, float y, float angle, Tank shooter, Texture bulletTexture){
         super(x, y);
         this.angle = angle;
         this.shooter = shooter;
+        this.bulletTexture = bulletTexture;
 
         //setting hitbox
         float width = bulletTexture.getWidth();
@@ -62,10 +63,6 @@ public class Bullet extends GameObject {
             bulletTexture.getWidth(), bulletTexture.getHeight(),
             false, false
             );
-    }
-
-    public void dispose(){
-        bulletTexture.dispose();
     }
 
     public int getDamage() {

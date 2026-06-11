@@ -18,9 +18,9 @@ public class Tank extends GameObject {
     public Texture tankTexture;
     SpriteBatch tankBatch;
 
-    //sound fx
-    Sound gunshot = Gdx.audio.newSound(Gdx.files.internal("shotfiring.wav"));
+    private Texture bulletTexture;
 
+    private Sound gunshotSound;
 
     float rad;
     private float speed = 200f;
@@ -37,10 +37,12 @@ public class Tank extends GameObject {
     public boolean isDead;
 
 
-    public Tank(Texture image, float x, float y, ControlScheme controls, Respawn respawn){
+    public Tank(Texture image, float x, float y, ControlScheme controls, Respawn respawn, Texture bulletTexture, Sound gunshotSound){
         super(x, y);
         this.tankTexture = image;
         this.controls = controls;
+        this.bulletTexture = bulletTexture;
+        this.gunshotSound = gunshotSound;
 
         this.respawn = respawn;
 
@@ -116,14 +118,14 @@ public class Tank extends GameObject {
 
         //shooting
         if (Gdx.input.isKeyJustPressed(controls.shootKey)){
-            gunshot.play();
+            gunshotSound.play(1f);
             rad = (float)Math.toRadians(angle);
             float barrelLength = 18f;
 
             float bulletX = x + tankTexture.getWidth() / 2f + (float)Math.cos(rad) * barrelLength;
             float bulletY = y + tankTexture.getHeight() / 2f + (float)Math.sin(rad) * barrelLength;
 
-            bullets.add(new Bullet(bulletX, bulletY, angle, this));
+            bullets.add(new Bullet(bulletX, bulletY, angle, this, bulletTexture));
         }
 
         for (Bullet b : bullets) {

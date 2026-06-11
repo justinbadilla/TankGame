@@ -36,10 +36,6 @@ public class MapScreen implements Screen {
     private Texture playerOneTank;
     private Texture playerTwoTank;
 
-    private TiledMap mapOne;
-    private TiledMap mapTwo;
-    private TiledMap mapThree;
-
     private Maps[] mapList;
     private Rectangle[] mapHitBoxes;
 
@@ -60,14 +56,10 @@ public class MapScreen implements Screen {
 
         screenFade = new ScreenFade(0.75f);
 
-        mapOne = new TmxMapLoader().load("maps/map 1.tmx");
-        mapTwo = new TmxMapLoader().load("maps/map 2.tmx");
-        mapThree = new TmxMapLoader().load("maps/map 3.tmx");
-
         mapList = new Maps[3];
-        mapList[0] = new Maps(mapOne, new Texture("maps/map 1.png"));
-        mapList[1] = new Maps(mapTwo, new Texture("maps/map 2.png"));
-        mapList[2] = new Maps(mapThree, new Texture("maps/map 3.png"));
+        mapList[0] = new Maps(game.mapOne, game.mapOnePreview);
+        mapList[1] = new Maps(game.mapTwo, game.mapTwoPreview);
+        mapList[2] = new Maps(game.mapThree, game.mapThreePreview);
 
         createMapHitBoxes();
     }
@@ -194,9 +186,5 @@ public class MapScreen implements Screen {
         batch.dispose();
         font.dispose();
         screenFade.dispose();
-
-        for (Maps map : mapList) {
-            map.getTexture().dispose();
-        }
     }
 }

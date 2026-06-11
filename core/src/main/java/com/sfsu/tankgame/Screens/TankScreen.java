@@ -65,10 +65,10 @@ public class TankScreen implements Screen {
         continueButton = new Texture("menu/continue.png");
 
         tankTextures = new Texture[4];
-        tankTextures[0] = new Texture("red tank.png");
-        tankTextures[1] = new Texture("blue tank.png");
-        tankTextures[2] = new Texture("grey tank.png");
-        tankTextures[3] = new Texture("navy tank.png");
+        tankTextures[0] = game.redTank;
+        tankTextures[1] = game.blueTank;
+        tankTextures[2] = game.greyTank;
+        tankTextures[3] = game.navyTank;
 
         playerOneChoice = 0;
         playerTwoChoice = 1;
@@ -261,9 +261,5 @@ public class TankScreen implements Screen {
         prevButton.dispose();
         continueButton.dispose();
         screenFade.dispose();
-
-        for (Texture texture : tankTextures) {
-            texture.dispose();
-        }
     }
 }

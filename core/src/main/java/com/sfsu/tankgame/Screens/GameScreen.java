@@ -110,8 +110,8 @@ public class GameScreen implements Screen{
         Vector2 tankOneSpawn = respawn.getRandomSpawn();
         Vector2 tankTwoSpawn = respawn.getFarthestSpawnFrom(tankOneSpawn);
 
-        tankOne = new Tank(playerOne, tankOneSpawn.x, tankOneSpawn.y, playerOneControls, respawn);
-        tankTwo = new Tank(playerTwo, tankTwoSpawn.x, tankTwoSpawn.y, playerTwoControls, respawn);
+        tankOne = new Tank(playerOne, tankOneSpawn.x, tankOneSpawn.y, playerOneControls, respawn, game.bulletTexture, game.gunshotSound);
+        tankTwo = new Tank(playerTwo, tankTwoSpawn.x, tankTwoSpawn.y, playerTwoControls, respawn, game.bulletTexture, game.gunshotSound);
 
 
         //HUD
@@ -142,7 +142,7 @@ public class GameScreen implements Screen{
             float height = Float.parseFloat(object.getProperties().get("height").toString());
 
             Rectangle wallRect = new Rectangle(x, y, width, height);
-            allObjects.add(new BreakableWall(wallRect));
+            allObjects.add(new BreakableWall(wallRect, game.breakableWallTexture));
         }
 
         
