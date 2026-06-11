@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.sfsu.tankgame.Screens.EndScreen;
-import com.sfsu.tankgame.Screens.GameScreen;
 import com.sfsu.tankgame.Screens.MenuScreen;
-import com.sfsu.tankgame.Screens.TankScreen;
 
 public class Main extends Game {
     //game assets

@@ -2,7 +2,6 @@ package com.sfsu.tankgame.gameobjects;
 
 import java.util.List;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
