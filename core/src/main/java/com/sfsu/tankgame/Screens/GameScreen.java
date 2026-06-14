@@ -40,7 +40,7 @@ public class GameScreen implements Screen{
     private Tank tankTwo;
 
     //map and camera
-    private TiledMap mapChoice; //choice
+    private TiledMap mapChoice;
     private Texture playerOne;
     private Texture playerTwo;
     private OrthogonalTiledMapRenderer renderer;

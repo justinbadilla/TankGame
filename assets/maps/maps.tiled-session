@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "/Users/justinbadilla/Personal Coding/TankGame/assets/menu/menuBackground.tmx",
+    "activeFile": "map 2.tmx",
     "expandedProjectPaths": [
         ".",
         "tilesets"
@@ -14,24 +14,24 @@
                 34
             ],
             "expandedObjectLayers": [
-                10,
-                16,
                 3,
-                19,
                 2,
-                11,
+                17,
                 13,
+                11,
+                10,
                 4,
                 12,
-                17,
+                14,
                 15,
-                14
+                16,
+                19
             ],
-            "scale": 0.5773,
+            "scale": 0.4315,
             "selectedLayer": 14,
             "viewCenter": {
-                "x": 641.780703273861,
-                "y": 319.5912004157284
+                "x": 701.0428736964079,
+                "y": 612.9779837775204
             }
         },
         "/Users/justinbadilla/Personal Coding/TankGame/assets/menu/tileset2c.tsx": {
@@ -78,34 +78,38 @@
         },
         "map 1.tmx": {
             "expandedObjectLayers": [
+                6,
                 5,
-                4,
-                6
+                4
             ],
             "scale": 0.8041,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 1055.8388260166644,
-                "y": 455.7890809600796
+                "x": 1055.2170128093521,
+                "y": 455.78908096007956
             }
         },
         "map 2.tmx": {
-            "expandedObjectLayers": [
-                31,
-                5,
-                4
+            "expandedGroupLayers": [
+                29,
+                14
             ],
-            "scale": 0.5775,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                5,
+                4,
+                31
+            ],
+            "scale": 0.51,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 746.3203463203463,
-                "y": 560.1731601731602
+                "x": 816.6666666666666,
+                "y": 508.82352941176475
             }
         },
         "map 3.tmx": {
             "expandedGroupLayers": [
-                16,
-                17
+                17,
+                16
             ],
             "expandedObjectLayers": [
                 5,
@@ -114,8 +118,8 @@
             "scale": 0.5479,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 695.3823690454461,
-                "y": 612.3380178864754
+                "x": 800.328527103486,
+                "y": 464.5008213177586
             }
         },
         "test.tmx": {
@@ -126,8 +130,8 @@
             "scale": 0.78,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 455.1282051282051,
-                "y": 367.30769230769226
+                "x": 480.1282051282051,
+                "y": 312.1794871794872
             }
         },
         "tileset1.tsx": {
@@ -173,11 +177,11 @@
     "project": "maps.tiled-project",
     "recentFiles": [
         "test.tmx",
+        "/Users/justinbadilla/Personal Coding/TankGame/assets/menu/menuBackground.tmx",
+        "map 1.tmx",
+        "TX Tileset Wall.tsx",
         "map 3.tmx",
         "map 2.tmx",
-        "TX Tileset Wall.tsx",
-        "map 1.tmx",
-        "/Users/justinbadilla/Personal Coding/TankGame/assets/menu/menuBackground.tmx",
         "tilesets/ForgottenMemWater.tsx",
         "tilesets/tileset2b.tsx",
         "tilesets/tileset2a.tsx",

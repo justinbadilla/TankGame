@@ -1,61 +1,149 @@
-# csc413-tankgame
+# Tank Game
+
+A two-player local multiplayer tank battle game built in Java using LibGDX and Tiled.
+
+## Overview
+
+Tank Game is a local multiplayer arena shooter where two players battle across destructible environments and multiple maps.
+
+Players select their tanks, choose a map, and fight until one player runs out of lives.
+
+## Features
+
+- Two-player local multiplayer gameplay
+- Tank selection menu
+- Interactive map selection screen
+- Dynamic camera system
+- Breakable walls
+- Health and lives system
+- Respawn system
+- Animated menu screens
+- Screen transitions and HUD overlays
+- Multiple maps created with Tiled
+
+## Controls
+
+### Player 1
+
+- Move: W A S D
+- Shoot: SPACE
+
+### Player 2
+
+- Move: Arrow Keys
+- Shoot: ENTER
+
+## Technologies
+
+- Java
+- LibGDX
+- Tiled Map Editor
+- Gradle
+- Object-Oriented Programming
+
+## Technical Highlights
+This project was built with an emphasis on reusable object-oriented design and separation of game systems.
+
+### Dynamic Camera System
+
+Implemented a camera that tracks both players simultaneously and adjusts zoom level based on player distance.
+
+### Collision System
+
+Built a collision framework using reusable GameObject classes and rectangular hitboxes.
+
+### Respawn System
+
+Designed a spawn manager that selects safe spawn locations and maximizes distance from opponents.
+
+### Asset Management
+
+Centralized shared textures, sounds, and maps within the game lifecycle to reduce memory usage and improve maintainability.
+
+## Project Structure
+
+com.sfsu.tankgame
+│
+├── Main
+├── Maps
+├── ControlScheme
+│
+├── Screens
+│   ├── MenuScreen
+│   ├── TankScreen
+│   ├── MapScreen
+│   ├── GameScreen
+│   ├── EndScreen
+│   └── ScreenFade
+│
+├── gameobjects
+│   ├── GameObject
+│   ├── Tank
+│   ├── Bullet
+│   ├── Wall
+│   └── BreakableWall
+│
+├── Systems
+│   └── Respawn
+│
+└── HUD
+    ├── HealthBar
+    └── HowToPlayOverlay
+
+## Screenshots
 
 
-| Student Information |                |
-|:-------------------:|----------------|
-|  Student Name       |   Justin Badilla   |
-|  Student Email      |   jbadilla@sfsu.edu   |
+## Running the Game
+
+### Option 1: Download the Latest Release
+Download `TankGame-1.0.jar` from the releases section.
+
+Run:
+java -jar TankGame-1.0.jar
 
 
-## Purpose of jar Folder 
-The jar folder will store the built jar of your term project.
+### Option 2: Run from Source
+Clone the repository:
 
-`NO SOURCE CODE SHOULD BE IN THIS FOLDER. DOING SO WILL CAUSE POINTS TO BE DEDUCTED
+git clone https://github.com/justinbadilla/TankGame.git
+cd TankGame
 
-`THIS FOLDER CAN NOT BE DELETED OR MOVED`
+Run the desktop application:
 
-# Required Information when Submitting Tank Game
+./gradlew lwjgl3:run
 
-## Version of Java Used: Java 21.0.7
+### Requirements 
+- Java 17+
+- Gradle (optional, Gradle Wrapper included)
 
-## IDE used: Visual Studio Code and IntelliJ
+## Challenges and Lessons Learned
 
-## Steps to Import project into IDE:
-    1. Clone/download project through GitHub
-    2. Open IDE
-    3. Open repository (the clone from GitHub)
-    4. Wait for Gradle to sync
+During development of Tank Game, I gained hands-on experience with game architecture, rendering systems, and asset management using LibGDX.
 
-## Steps to Build Your Project:
-    1. On the right side (of IntelliJ), open the Gradle tool
-    2. Go to lwjgl3, to tasks, to build to jar.
-    3. Double click jar to generate and build the jar file. 
-    4. New jar file will be located tankgame/lwjgl3/build/libs
- 
-## Steps to run your Project:
-    1. In this case, the build is not needed (the jar file is in the jar folder)
-    2. Open Jar file:
+Key areas of growth included:
 
-        Using GUI:
-        1. Open repository and go to /jar and right click jar file.
-        2. Click "Open With" and choose java
+- Building a complete game using the LibGDX framework
+- Designing reusable object-oriented systems for tanks, bullets, walls, and game screens
+- Implementing collision detection and game object interactions
+- Developing a dynamic camera system that follows and zooms based on player positions
+- Managing assets such as textures, sounds, and maps through centralized ownership and disposal practices
+- Integrating maps created with the Tiled Map Editor into gameplay
+- Creating menu systems, screen transitions, and HUD components
+- Debugging rendering, OpenGL, and screen lifecycle issues
+- Organizing a multi-class Java project using clean separation of responsibilities
 
-        Using Terminal:
-        1. Go to repository location via terminal. 
-        2. Head into jar folderf
-            "cd jar"
-        3. java -jar TankGame-1.0.0.jar
+This project strengthened my understanding of game development, software architecture, and maintaining a larger codebase over time.
 
-## Controls to play your Game:
+## Future Improvements
 
-|               | Player 1 | Player 2 |
-|---------------|----------|----------|
-|  Forward      |    W    |     UP     |
-|  Backward     |    S    |    DOWN    |
-|  Rotate left  |    A    |    LEFT    |
-|  Rotate Right |    D    |    RIGHT   |
-|  Shoot        |  SPACE  |RETURN/ENTER|
+- AI-controlled opponents
+- Overheating Tank
+- Online multiplayer
+- Additional maps
+- Powerups
+- Particle effects
+- Sound settings menu
 
-<!-- You may add more controls if you need to. -->
-* To cylce through different tank colors use A and D (for player one) and LEFT and RIGHT arrows (for player two)
-* To cycle through maps in map screen, use LEFT and RIGHT arrow keys.
+## Portfolio Goals
+
+This project was developed to strengthen my understanding of game development, object-oriented design, asset management, and software architecture using Java and LibGDX.

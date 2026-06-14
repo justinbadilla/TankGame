@@ -143,7 +143,7 @@ public class MenuScreen implements Screen{
         renderer.setView(camera);
         renderer.render();
 
-        //mouse things
+        //mouse cursor
         float mouseX = Gdx.input.getX();
         float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
